@@ -13,3 +13,5 @@ export class WelcomeComponent implements OnInit {
   }
 
 }
+
+export default WelcomeComponent;
