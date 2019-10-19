@@ -10,6 +10,7 @@
 }
 
 .menu-sidebar {
+  background-color: #13c2c2;
   position: relative;
   z-index: 10;
   min-height: 100vh;
@@ -31,10 +32,9 @@
 .sidebar-logo {
   position: relative;
   height: 64px;
-  padding-left: 24px;
   overflow: hidden;
   line-height: 64px;
-  background: #001529;
+  background-color: #12d6d6;
   transition: all .3s;
 }
 
