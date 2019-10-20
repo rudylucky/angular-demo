@@ -1,1 +1,20 @@
-<p>index works!</p>
+<nz-layout class="app-layout">
+  <nz-sider class="menu-sidebar" nzCollapsible [nzWidth]="isCollapsed ? 0 : '100px'" nzBreakpoint="md"
+    [nzTrigger]="null">
+    <app-my-sider></app-my-sider>
+  </nz-sider>
+  <nz-layout>
+    <nz-header>
+      <div class="app-header">
+        <span class="header-trigger" (click)="isCollapsed = !isCollapsed">
+          <i class="trigger" nz-icon [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"></i>
+        </span>
+      </div>
+    </nz-header>
+    <nz-content>
+      <div class="inner-content">
+        <router-outlet></router-outlet>
+      </div>
+    </nz-content>
+  </nz-layout>
+</nz-layout>

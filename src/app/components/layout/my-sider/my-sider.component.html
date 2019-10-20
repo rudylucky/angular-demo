@@ -1,1 +1,13 @@
-<p>my-sider works!</p>
+<div class="sidebar-logo">
+</div>
+<div class="menu" (mouseleave)="handleMenuOut()">
+  <div class="menu-item" *ngFor="let item of menus" (mouseenter)="handleMenuEnter(item)">
+    <i nz-icon nzType="{{item.icon}}" nzTheme="fill"></i>
+    <span>{{item.name}}</span>
+  </div>
+<div class="menu-page" *ngIf="showPage" (mouseenter)="showPage = true">
+  <div class="menu-page-item" *ngFor="let item of currentMenu.pages">
+    <i nz-icon nzType="{{item.icon}}" nzTheme="fill"></i>
+    <span>{{item.name}}</span>
+  </div>
+</div>

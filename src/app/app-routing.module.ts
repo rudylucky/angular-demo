@@ -1,16 +1,16 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import WelcomeComponent from '@/pages/welcome/welcome.component';
-import IndexComponent from '@/pages/index/index.component';
+import { WelcomeComponent } from '@/pages/welcome/welcome.component';
+import { UserInfoComponent } from '@/pages/system/user-info/user-info.component';
 
 const routes: Routes = [
-  { path: '', pathMatch: 'full', redirectTo: '/welcome' },
+  { path: '', pathMatch: 'prefix', redirectTo: '/welcome' },
   { path: 'welcome', component: WelcomeComponent },
-  { path: 'index', component: IndexComponent },
+  { path: 'user-info', component: UserInfoComponent },
 ];
 
 @NgModule({
-  declarations: [IndexComponent, WelcomeComponent],
+  declarations: [],
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })

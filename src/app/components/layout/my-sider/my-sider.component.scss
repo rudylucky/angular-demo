@@ -1,0 +1,67 @@
+.sidebar-logo {
+  position: relative;
+  height: 64px;
+  overflow: hidden;
+  line-height: 64px;
+  background-color: #12d6d6;
+  transition: all .3s;
+}
+
+.sidebar-logo img {
+  display: inline-block;
+  height: 32px;
+  width: 32px;
+  vertical-align: middle;
+}
+
+.sidebar-logo h1 {
+  display: inline-block;
+  margin: 0 0 0 20px;
+  color: #fff;
+  font-weight: 600;
+  font-size: 14px;
+  font-family: Avenir, Helvetica Neue, Arial, Helvetica, sans-serif;
+  vertical-align: middle;
+}
+
+@mixin a-menu-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  user-select: none;
+  color: #fff;
+
+  span {
+    padding-right: 5px;
+    margin-left: 5px;
+  }
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.2);
+  }
+}
+
+.menu {
+  position: relative;
+
+  .menu-item {
+    @include a-menu-item;
+    font-size: 15px;
+    height: 50px;
+  }
+
+}
+
+.menu-page {
+  background-color: #12d6d6;
+  position: fixed;
+  left: 100px;
+  top: 64px;
+  bottom: 0;
+  width: 100px;
+
+  .menu-page-item {
+    @include a-menu-item;
+    height: 40px;
+  }
+}

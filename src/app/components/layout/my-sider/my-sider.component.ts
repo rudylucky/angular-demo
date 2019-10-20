@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import MenuService, { Menu } from '@/services/menu-service.service';
 
 @Component({
   selector: 'app-my-sider',
@@ -7,9 +8,24 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MySiderComponent implements OnInit {
 
-  constructor() { }
+  menus: Menu[];
+  currentMenu: Menu;
+  showPage = false;
+
+  constructor(private menuService: MenuService) { }
 
   ngOnInit() {
+    const menus = this.menuService.getMenus();
+    this.menus = menus;
+  }
+
+  handleMenuOut() {
+    this.showPage = false;
+  }
+
+  handleMenuEnter(menu: Menu) {
+    this.currentMenu = menu;
+    this.showPage = true;
   }
 
 }
