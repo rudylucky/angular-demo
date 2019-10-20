@@ -13,5 +13,3 @@ export class IndexComponent implements OnInit {
   }
 
 }
-
-export default IndexComponent;

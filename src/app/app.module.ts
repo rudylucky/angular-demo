@@ -10,10 +10,12 @@ import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { registerLocaleData } from '@angular/common';
 import zh from '@angular/common/locales/zh';
-import IndexComponent from '@/pages/index/index.component';
-import WelcomeComponent from '@/pages/welcome/welcome.component';
+
+import { IndexComponent } from '@/pages/index/index.component';
+import { WelcomeComponent } from '@/pages/welcome/welcome.component';
 import { MySiderComponent } from '@/components/layout/my-sider/my-sider.component';
 import { UserInfoComponent } from '@/pages/system/user-info/user-info.component';
+import { SearchTableComponent } from '@/components/base/search-table/search-table.component';
 
 registerLocaleData(zh);
 
@@ -23,7 +25,8 @@ registerLocaleData(zh);
     IndexComponent,
     WelcomeComponent,
     MySiderComponent,
-    UserInfoComponent
+    UserInfoComponent,
+    SearchTableComponent,
   ],
   imports: [
     BrowserModule,

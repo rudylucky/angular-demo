@@ -1,0 +1,13 @@
+.container-search-table {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  nz-table {
+
+  overflow: auto;
+  }
+  nz-pagination {
+    margin-top: 15px;
+    text-align: end;
+  }
+}

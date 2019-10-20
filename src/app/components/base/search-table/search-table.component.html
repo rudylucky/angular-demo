@@ -1,1 +1,22 @@
-<p>search-table works!</p>
+<div class="container-search-table">
+  <nz-table [nzLoading]="loading" nzSize="small" nzShowPagination="false" [nzData]="allData">
+    <thead (nzSortChange)="sort($event)" nzSingleSort>
+      <tr>
+        <th nzShowCheckbox [nzChecked]="isAllChecked" [nzIndeterminate]="isIndeterminate"
+          (nzCheckedChange)="checkAll($event)"></th>
+        <th nzShowSort nzSortKey="name">Name</th>
+        <th nzShowFilter [nzFilters]="filterGender" (nzFilterChange)="updateFilter($event)">Gender</th>
+        <th nzShowSort nzSortKey="email"><span>Email</span></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of allData">
+        <td nzShowCheckbox [(nzChecked)]="checkedList[data.key]" (nzCheckedChange)="handleCheckChange()"></td>
+        <td>{{ data.name }}</td>
+        <td>{{ data.gender }}</td>
+        <td>{{ data.email }}</td>
+      </tr>
+    </tbody>
+  </nz-table>
+  <nz-pagination [nzPageIndex]="pageIndex" [nzTotal]="total" nzShowSizeChanger [nzPageSize]="pageSize" [nzPageIndex]="pageIndex" nzShowQuickJumper></nz-pagination>
+</div>
