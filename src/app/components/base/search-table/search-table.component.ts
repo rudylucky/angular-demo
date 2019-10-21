@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ItemData, UserService } from '@/services/user.service';
+import { UserInfo, UserService } from '@/services/user.service';
 
 @Component({
   selector: 'app-search-table',
@@ -7,7 +7,7 @@ import { ItemData, UserService } from '@/services/user.service';
   styleUrls: ['./search-table.component.scss']
 })
 export class SearchTableComponent implements OnInit {
-  allData: ItemData[] = [];
+  allData: UserInfo[] = [];
   checkedList: {[key: string]: boolean} = {};
   numberOfChecked = 0;
 
@@ -16,22 +16,12 @@ export class SearchTableComponent implements OnInit {
 
   loading = true;
   pageIndex = 1;
-  pageSize = 50;
+  pageSize = 80;
   total = 1;
-  sortValue: string | null = null;
-  sortKey: string | null = null;
-  filterGender = [{ text: 'male', value: 'male' }, { text: 'female', value: 'female' }];
-  searchGenderList: string[] = [];
 
   constructor(private userService: UserService) { }
 
-  sort(sort: { key: string; value: string }): void {
-    this.sortKey = sort.key;
-    this.sortValue = sort.value;
-    this.searchData();
-  }
-
-  currentPageDataChange($event: ItemData[]): void {
+  currentPageDataChange($event: UserInfo[]): void {
     this.refreshStatus();
   }
 
@@ -45,7 +35,7 @@ export class SearchTableComponent implements OnInit {
       this.pageIndex = 1;
     }
     this.loading = true;
-    this.allData = this.userService.getUsers();
+    this.allData = this.userService.getUsers(this.pageSize, this.pageIndex).records;
     this.loading = false;
     this.total = 200;
   }
@@ -55,13 +45,8 @@ export class SearchTableComponent implements OnInit {
   }
 
   refreshStatus(): void {
-    this.isAllChecked = this.allData.every(v => Object.keys(this.checkedList).includes(v.key));
+    this.isAllChecked = this.allData.every(v => this.checkedList[v.key] === true);
     this.isIndeterminate = !this.isAllChecked && this.allData.some(v => this.checkedList[v.key] === true);
-  }
-
-  updateFilter(value: string[]): void {
-    this.searchGenderList = value;
-    this.searchData(true);
   }
 
   ngOnInit(): void {

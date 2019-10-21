@@ -4,7 +4,7 @@ import { WelcomeComponent } from '@/pages/welcome/welcome.component';
 import { UserInfoComponent } from '@/pages/system/user-info/user-info.component';
 
 const routes: Routes = [
-  { path: '', pathMatch: 'full', redirectTo: '/welcome' },
+  { path: '', pathMatch: 'full', redirectTo: '/user-info' },
   { path: 'welcome', component: WelcomeComponent },
   { path: 'user-info', component: UserInfoComponent },
 ];
