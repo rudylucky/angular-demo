@@ -4,12 +4,12 @@
     nzShowQuickJumper nzShowPagination [(nzPageSize)]="pageSize" [(nzPageIndex)]="pageIndex" (nzPageSizeChange)="searchData()" (nzPageIndexChange)="searchData()">
     <thead (nzSortChange)="sort($event)" nzSingleSort>
       <tr>
-        <th width="150" nzShowCheckbox [nzChecked]="isAllChecked" [nzIndeterminate]="isIndeterminate"
+        <th nzWidth="150px" nzShowCheckbox [nzChecked]="isAllChecked" [nzIndeterminate]="isIndeterminate"
           (nzCheckedChange)="checkAll($event)"></th>
-        <th nzShowSort nzSortKey="name">姓名</th>
-        <th nzShowFilter [nzFilters]="filterGender" (nzFilterChange)="updateFilter($event)">性别</th>
-        <th nzShowSort nzSortKey="email"><span>Email</span></th>
-        <th>操作</th>
+        <th nzWidth="150px" nzShowSort nzSortKey="name">姓名</th>
+        <th nzWidth="150px" nzShowFilter [nzFilters]="filterGender" (nzFilterChange)="updateFilter($event)">性别</th>
+        <th nzWidth="150px" nzShowSort nzSortKey="email"><span>Email</span></th>
+        <th >操作</th>
       </tr>
     </thead>
     <tbody>
