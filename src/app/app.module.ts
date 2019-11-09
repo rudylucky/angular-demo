@@ -16,6 +16,7 @@ import { WelcomeComponent } from '@/pages/welcome/welcome.component';
 import { MySiderComponent } from '@/components/layout/my-sider/my-sider.component';
 import { UserInfoComponent } from '@/pages/system/user-info/user-info.component';
 import { SearchTableComponent } from '@/components/base/search-table/search-table.component';
+import { InputComponent } from './components/input/input.component';
 
 registerLocaleData(zh);
 
@@ -27,6 +28,7 @@ registerLocaleData(zh);
     MySiderComponent,
     UserInfoComponent,
     SearchTableComponent,
+    InputComponent
   ],
   imports: [
     BrowserModule,

@@ -1,5 +1,30 @@
-import { Component, OnInit } from '@angular/core';
-import { UserInfo, UserService } from '@/services/user.service';
+import { Component, OnInit, Input, ɵLocaleDataIndex } from '@angular/core';
+import { InputType, Options } from '@/components/input/input.component';
+import { PageData } from '@/services/user.service';
+
+export interface Columns {
+  [index: number]: {
+    title: string;
+    dataIndex?: string;
+    type?: InputType;
+    options?: Options;
+    searchable?: boolean
+    render?: (value) => any;
+  };
+}
+
+export interface DataItem {
+  key: string;
+}
+
+export interface TableData {
+  [index: number]: DataItem;
+}
+
+interface Params {
+  pageSize: number;
+  pageIndex: number;
+}
 
 @Component({
   selector: 'app-search-table',
@@ -7,8 +32,15 @@ import { UserInfo, UserService } from '@/services/user.service';
   styleUrls: ['./search-table.component.scss']
 })
 export class SearchTableComponent implements OnInit {
-  allData: UserInfo[] = [];
-  checkedList: {[key: string]: boolean} = {};
+
+  @Input() columns: Columns = [];
+  @Input() tableData: Array<DataItem> = [];
+
+  @Input() update: (record) => any;
+  @Input() delete: (record) => any;
+  @Input() search: (record: Params) => PageData<any>;
+
+  checkedList: { [key: string]: boolean } = {};
   numberOfChecked = 0;
 
   isAllChecked = false;
@@ -19,37 +51,40 @@ export class SearchTableComponent implements OnInit {
   pageSize = 80;
   total = 1;
 
-  constructor(private userService: UserService) { }
+  modalVisible = false;
 
-  currentPageDataChange($event: UserInfo[]): void {
+  constructor() { }
+
+  currentPageDataChange($event: DataItem[]): void {
     this.refreshStatus();
   }
 
   checkAll(value: boolean): void {
-    this.allData.forEach(v => this.checkedList[v.key] = value);
+    this.tableData.forEach(v => this.checkedList[v.key] = value);
     this.refreshStatus();
   }
 
-  searchData(reset: boolean = false): void {
-    if (reset) {
-      this.pageIndex = 1;
-    }
-    this.loading = true;
-    this.allData = this.userService.getUsers(this.pageSize, this.pageIndex).records;
+  searchAndRefresh() {
+    const pageData = this.search({
+      pageSize: this.pageSize,
+      pageIndex: this.pageIndex
+    });
+    this.total = pageData.total;
+    this.tableData = pageData.records;
     this.loading = false;
-    this.total = 200;
   }
+
 
   handleCheckChange(): void {
     this.refreshStatus();
   }
 
   refreshStatus(): void {
-    this.isAllChecked = this.allData.every(v => this.checkedList[v.key] === true);
-    this.isIndeterminate = !this.isAllChecked && this.allData.some(v => this.checkedList[v.key] === true);
+    this.isAllChecked = this.tableData.every(v => this.checkedList[v.key] === true);
+    this.isIndeterminate = !this.isAllChecked && this.tableData.some(v => this.checkedList[v.key] === true);
   }
 
   ngOnInit(): void {
-    this.searchData();
+    this.searchAndRefresh();
   }
 }

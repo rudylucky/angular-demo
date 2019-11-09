@@ -1,35 +1,40 @@
 <div class="container-search-table">
-  <nz-table [nzLoading]="loading" nzSize="small" [nzData]="allData" [nzPageIndex]="pageIndex" [nzScroll]="{y: '300px'}" nzShowSizeChanger [nzTotal]="total"
-    nzFrontPagination="false"
-    nzShowQuickJumper nzShowPagination [(nzPageSize)]="pageSize" [(nzPageIndex)]="pageIndex" (nzPageSizeChange)="searchData()" (nzPageIndexChange)="searchData()">
-    <thead (nzSortChange)="sort($event)" nzSingleSort>
+  <nz-table [nzLoading]="loading" nzSize="small" [nzData]="tableData" [nzPageIndex]="pageIndex"
+    [nzScroll]="{y: '400px'}" nzShowSizeChanger [nzTotal]="total" nzFrontPagination="false" nzShowQuickJumper
+    nzShowPagination [(nzPageSize)]="pageSize" [(nzPageIndex)]="pageIndex" (nzPageSizeChange)="searchAndRefresh()"
+    nzBordered="true" (nzPageIndexChange)="searchAndRefresh()">
+    <thead nzSingleSort>
       <tr>
-        <th nzWidth="150px" nzShowCheckbox [nzChecked]="isAllChecked" [nzIndeterminate]="isIndeterminate"
+        <th nzWidth="50px" nzShowCheckbox [nzChecked]="isAllChecked" [nzIndeterminate]="isIndeterminate"
           (nzCheckedChange)="checkAll($event)"></th>
-        <th nzWidth="150px" nzShowSort nzSortKey="name">姓名</th>
-        <th nzWidth="150px" nzShowFilter [nzFilters]="filterGender" (nzFilterChange)="updateFilter($event)">性别</th>
-        <th nzWidth="150px" nzShowSort nzSortKey="email"><span>Email</span></th>
-        <th >操作</th>
+        <th *ngFor="let column of columns" [nzWidth]="column.width ? column.width : '120px'">{{column.title}}</th>
+        <th>操作</th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let data of allData">
+      <tr *ngFor="let data of tableData">
         <td nzShowCheckbox [(nzChecked)]="checkedList[data.key]" (nzCheckedChange)="handleCheckChange()"></td>
-        <td>{{ data.name }}</td>
-        <td>{{ data.gender }}</td>
-        <td>{{ data.email }}</td>
+        <td *ngFor="let column of columns">{{data[column.dataIndex]}}</td>
         <td>
-          <div class="editable-row-operations">
-            <ng-container>
-              <a>编辑</a>
-            </ng-container>
-            <ng-template>
-              <a>保存</a>
-              <a nz-popconfirm nzTitle="Sure to cancel?">Cancel</a>
-            </ng-template>
-          </div>
+          <ng-container *ngIf="update">
+            <a (click)="modalVisible = true">编辑</a>
+          </ng-container>
+          &nbsp;
+          <ng-container *ngIf="delete">
+            <a *ngIf="delete" nz-popconfirm nzPopconfirmTitle="你确定要删除该记录吗?" (nzOnConfirm)="delete(data)"
+              (nzOnCancel)="delete(data)">删除</a>
+          </ng-container>
         </td>
       </tr>
     </tbody>
   </nz-table>
+  <nz-modal [nzVisible]="modalVisible" (nzOnCancel)="modalVisible = false" [nzClosable]="false" nzTitle="编辑"
+    nzWidth="600">
+    <div class="container-edit">
+      <span *ngFor="let column of columns" class="prop">
+        {{column.title}}: <app-input [type]="column.type" [options]="column.options" style="display: inline-block">
+        </app-input>
+      </span>
+    </div>
+  </nz-modal>
 </div>

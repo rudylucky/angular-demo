@@ -2,12 +2,26 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  nz-table {
 
-  overflow: auto;
+  nz-table {
+    overflow: auto;
   }
+
   nz-pagination {
     margin-top: 15px;
     text-align: end;
+  }
+}
+
+.container-edit {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+
+  .prop {
+    text-align: end;
+    width: 50%;
+    padding-left: 20px;
+    margin-top: 10px;
   }
 }
