@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Columns } from '@/components/base/search-table/search-table.component';
-import { InputType } from '@/components/input/input.component';
-import { UserInfo, UserService } from '@/services/user.service';
+import { UserService } from '@/services/user.service';
+import { Column, InputType } from '@/services/service-interface';
 
 @Component({
   selector: 'app-user-info',
@@ -10,9 +9,13 @@ import { UserInfo, UserService } from '@/services/user.service';
 })
 export class UserInfoComponent implements OnInit {
 
-  search = this.userService.list;
+  search = this.userService.search;
 
-  columns: Columns = [
+  list = this.userService.list;
+
+  info = this.userService.info;
+
+  columns: Array<Column> = [
     {
       title: '姓名',
       dataIndex: 'username',

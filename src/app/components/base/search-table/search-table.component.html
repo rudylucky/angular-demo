@@ -1,5 +1,5 @@
 <div class="container-search-table">
-  <nz-table [nzLoading]="loading" nzSize="small" [nzData]="tableData" [nzPageIndex]="pageIndex"
+  <nz-table [nzLoading]="loading" nzSize="small" [nzData]="renderedData" [nzPageIndex]="pageIndex"
     [nzScroll]="{y: '400px'}" nzShowSizeChanger [nzTotal]="total" nzFrontPagination="false" nzShowQuickJumper
     nzShowPagination [(nzPageSize)]="pageSize" [(nzPageIndex)]="pageIndex" (nzPageSizeChange)="searchAndRefresh()"
     nzBordered="true" (nzPageIndexChange)="searchAndRefresh()">
@@ -12,27 +12,28 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let data of tableData">
+      <tr *ngFor="let data of renderedData">
         <td nzShowCheckbox [(nzChecked)]="checkedList[data.key]" (nzCheckedChange)="handleCheckChange()"></td>
         <td *ngFor="let column of columns">{{data[column.dataIndex]}}</td>
         <td>
           <ng-container *ngIf="update">
-            <a (click)="modalVisible = true">编辑</a>
+            <a (click)="edit(data)">编辑</a>
           </ng-container>
           &nbsp;
           <ng-container *ngIf="delete">
-            <a *ngIf="delete" nz-popconfirm nzPopconfirmTitle="你确定要删除该记录吗?" (nzOnConfirm)="delete(data)"
-              (nzOnCancel)="delete(data)">删除</a>
+            <a *ngIf="delete" nz-popconfirm nzPopconfirmTitle="你确定要删除该记录吗?" (nzOnConfirm)="delete(data)">删除</a>
           </ng-container>
         </td>
       </tr>
     </tbody>
   </nz-table>
   <nz-modal [nzVisible]="modalVisible" (nzOnCancel)="modalVisible = false" [nzClosable]="false" nzTitle="编辑"
-    nzWidth="600">
+    (nzOnOk)="handleUpdate()" nzWidth="600">
     <div class="container-edit">
       <span *ngFor="let column of columns" class="prop">
-        {{column.title}}: <app-input [type]="column.type" [options]="column.options" style="display: inline-block">
+        {{column.title}}:
+        <app-input name="column.dataIndex" ngDefaultControl [(ngModel)]="editData[column.dataIndex]"
+          [type]="column.type" [options]="column.options" style="display: inline-block">
         </app-input>
       </span>
     </div>
