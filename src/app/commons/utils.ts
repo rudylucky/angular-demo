@@ -23,6 +23,3 @@ const _ = {
 };
 
 export default _;
-
-const s = randomTruth();
-console.log(s);

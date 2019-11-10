@@ -11,9 +11,7 @@ import _ from '@/commons/utils';
 export class UserInfoComponent implements OnInit {
 
   search = this.userService.search;
-
   list = this.userService.list;
-
   info = this.userService.info;
 
   columns: Array<Column> = [
@@ -49,13 +47,13 @@ export class UserInfoComponent implements OnInit {
       dataIndex: 'censusRegister',
     },
     {
-      title: '正式员工',
+      title: '转正状态',
       dataIndex: 'regular',
       type: InputType.SWITCH,
       options: this.userService.listBoolType()
     },
     {
-      title: '是否在职',
+      title: '在职状态',
       dataIndex: 'inPosition',
       type: InputType.SWITCH,
       options: this.userService.listBoolType()
@@ -65,6 +63,10 @@ export class UserInfoComponent implements OnInit {
   constructor(private userService: UserService) { }
 
   ngOnInit() {
+  }
+
+  save = (data) => {
+    console.log('save', data);
   }
 
   update = (data) => {

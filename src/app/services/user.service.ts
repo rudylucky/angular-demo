@@ -29,7 +29,6 @@ export class UserService implements BaseService<UserData> {
       inPosition: _.range(),
       regular: _.range()
     }));
-    console.log(this.userData);
   }
 
   getUserData() {

@@ -2,6 +2,10 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Column, DataItem, PageData, SearchParams, ListParams, InputType, UserData } from '@/services/service-interface';
 import _ from '@/commons/utils';
 
+enum SaveType {
+  SAVE, UPDATE
+}
+
 @Component({
   selector: 'app-search-table',
   templateUrl: './search-table.component.html',
@@ -17,6 +21,7 @@ export class SearchTableComponent implements OnInit {
   @Input() search: (params: SearchParams) => PageData<any>;
   @Input() list: (params: ListParams) => Array<any>;
   @Input() info: (params: number) => any;
+  @Input() save: (params) => any;
 
   renderedData = [];
   checkedList: { [key: string]: boolean } = {};
@@ -33,6 +38,7 @@ export class SearchTableComponent implements OnInit {
   editData = {};
   searchData = {};
   searchColumns: Array<Column> = [];
+  saveType: SaveType;
 
   modalVisible = false;
 
@@ -58,9 +64,35 @@ export class SearchTableComponent implements OnInit {
     this.transferForRender();
   }
 
-  edit = (data: UserData) => {
-    this.editData = this.info(data.id);
+  preEdit = (data: UserData) => {
     this.modalVisible = true;
+    this.editData = this.info(data.id);
+    this.saveType = SaveType.UPDATE;
+  }
+
+  preSave() {
+    this.editData = {};
+    this.modalVisible = true;
+    this.saveType = SaveType.SAVE;
+  }
+
+  handleSave = () => {
+    this.modalVisible = false;
+    const data = this.editData;
+    this.columns.filter(v => v.type === InputType.SWITCH)
+      .map(v => v.dataIndex)
+      .forEach(key => data[key] = data[key] ? 1 : 0);
+    this.columns.filter(v => v.type === InputType.SELECT)
+      .map(v => v.dataIndex)
+      .forEach(key => data[key] === -1 && delete data[key]);
+    if (this.saveType === SaveType.SAVE) {
+      this.save(data);
+    } else if (this.saveType === SaveType.UPDATE) {
+      this.update(data);
+    } else {
+      throw Error('save type error');
+    }
+    this.saveType = null;
   }
 
   private transferForRender = () => {
@@ -78,16 +110,6 @@ export class SearchTableComponent implements OnInit {
     this.delete(deleteData);
   }
 
-  handleUpdate = () => {
-    this.modalVisible = false;
-    Object.keys(this.editData).forEach(key => {
-      if (typeof this.editData[key] === 'boolean') {
-        this.editData[key] = this.editData[key] ? 1 : 0;
-      }
-    });
-    this.update(this.editData);
-  }
-
   handleCheckChange = (): void => {
     this.refreshStatus();
   }
@@ -97,9 +119,14 @@ export class SearchTableComponent implements OnInit {
     this.isIndeterminate = !this.isAllChecked && this.tableData.some(v => this.checkedList[v.id] === true);
   }
 
+  resetSearch = (): void => {
+    this.searchColumns = this.columns.filter(v => v.searchable);
+    this.searchData = {};
+    this.searchColumns.filter(v => v.options).forEach(v => this.searchData[v.dataIndex] = -1);
+  }
+
   ngOnInit(): void {
     this.searchAndRefresh();
-    this.searchColumns = this.columns.filter(v => v.searchable);
-    this.searchColumns.filter(v => v.options).forEach(v => this.searchData[v.dataIndex] = -1);
+    this.resetSearch();
   }
 }
