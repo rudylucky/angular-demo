@@ -22,6 +22,8 @@ export interface UserData extends DataItem {
   age: number;
   censusRegister: string;
   degree: number;
+  inPosition: number;
+  regular: number;
 }
 
 export class PageData<T> {

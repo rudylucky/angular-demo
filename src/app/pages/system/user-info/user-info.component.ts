@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '@/services/user.service';
 import { Column, InputType } from '@/services/service-interface';
+import _ from '@/commons/utils';
 
 @Component({
   selector: 'app-user-info',
@@ -46,6 +47,18 @@ export class UserInfoComponent implements OnInit {
     {
       title: '户籍',
       dataIndex: 'censusRegister',
+    },
+    {
+      title: '正式员工',
+      dataIndex: 'regular',
+      type: InputType.SWITCH,
+      options: this.userService.listBoolType()
+    },
+    {
+      title: '是否在职',
+      dataIndex: 'inPosition',
+      type: InputType.SWITCH,
+      options: this.userService.listBoolType()
     }
   ];
 

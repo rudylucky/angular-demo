@@ -21,7 +21,7 @@
           </ng-container>
           &nbsp;
           <ng-container *ngIf="delete">
-            <a *ngIf="delete" nz-popconfirm nzPopconfirmTitle="你确定要删除该记录吗?" (nzOnConfirm)="delete(data)">删除</a>
+            <a *ngIf="delete" nz-popconfirm nzPopconfirmTitle="你确定要删除该记录吗?" (nzOnConfirm)="handleDelete(data)">删除</a>
           </ng-container>
         </td>
       </tr>
@@ -33,7 +33,7 @@
       <span *ngFor="let column of columns" class="prop">
         {{column.title}}:
         <app-input name="column.dataIndex" ngDefaultControl [(ngModel)]="editData[column.dataIndex]"
-          [type]="column.type" [options]="column.options" style="display: inline-block">
+          [name]="column.dataIndex" [type]="column.type" [options]="column.options" style="display: inline-block">
         </app-input>
       </span>
     </div>

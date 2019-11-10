@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Column, DataItem, PageData, SearchParams, ListParams, InputType, UserData } from '@/services/service-interface';
+import _ from '@/commons/utils';
 
 @Component({
   selector: 'app-search-table',
@@ -52,7 +53,7 @@ export class SearchTableComponent implements OnInit {
     this.total = pageData.total;
     this.tableData = pageData.records;
     this.loading = false;
-    this.transfer();
+    this.transferForRender();
   }
 
   edit = (data: UserData) => {
@@ -60,9 +61,9 @@ export class SearchTableComponent implements OnInit {
     this.modalVisible = true;
   }
 
-  transfer = () => {
-    this.renderedData = this.tableData;
-    this.columns.filter(element => element.type === InputType.SELECT)
+  private transferForRender = () => {
+    this.renderedData = _.clone(this.tableData);
+    this.columns.filter(element => [InputType.SELECT, InputType.SWITCH].includes(element.type))
       .forEach(element => {
         this.renderedData.forEach(v => {
           v[element.dataIndex] = element.options.find(option => option.value === v[element.dataIndex]).title;
@@ -70,7 +71,12 @@ export class SearchTableComponent implements OnInit {
       });
   }
 
-  handleUpdate() {
+  handleDelete = (data) => {
+    const deleteData = this.tableData.find(v => data.id === v.id);
+    this.delete(deleteData);
+  }
+
+  handleUpdate = () => {
     this.modalVisible = false;
     this.update(this.editData);
   }

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BaseService, UserData, PageData, Option, SearchParams } from './service-interface';
+import _ from '@/commons/utils';
 
 @Injectable({
   providedIn: 'root'
@@ -17,22 +18,22 @@ export class UserService implements BaseService<UserData> {
     if (this.userData) {
       return;
     }
-    this.userData = Array(200).fill({}).map((item, index) => {
-      console.log(index);
-      return {
-        id: index,
-        username: 'name' + index,
-        gender: 0,
-        email: 'email' + index,
-        age: index,
-        censusRegister: '江苏',
-        degree: 0
-      };
-    });
+    this.userData = Array(200).fill({}).map((item, index) => ({
+      id: index,
+      username: 'name' + index,
+      gender: _.range(1),
+      email: 'email' + index,
+      age: index,
+      censusRegister: '江苏',
+      degree: _.range(4),
+      inPosition: _.range(),
+      regular: _.range()
+    }));
+    console.log(this.userData);
   }
 
   getUserData() {
-    return JSON.parse(JSON.stringify(this.userData));
+    return _.clone(this.userData);
   }
 
   search = (params: SearchParams): PageData<UserData> => {
@@ -79,5 +80,13 @@ export class UserService implements BaseService<UserData> {
       title: '博士',
     }];
   }
-
+  listBoolType(): Array<Option> {
+    return [{
+      value: 1,
+      title: '是'
+    }, {
+      value: 0,
+      title: '否'
+    }];
+  }
 }

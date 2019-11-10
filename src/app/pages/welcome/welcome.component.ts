@@ -7,9 +7,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class WelcomeComponent implements OnInit {
 
+  value = 1;
+
   constructor() { }
 
   ngOnInit() {
+  }
+
+  handleClick() {
   }
 
 }
