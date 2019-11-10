@@ -27,10 +27,12 @@ export class SearchTableComponent implements OnInit {
 
   loading = true;
   pageIndex = 1;
-  pageSize = 80;
+  pageSize = 10;
   total = 1;
 
   editData = {};
+  searchData = {};
+  searchColumns: Array<Column> = [];
 
   modalVisible = false;
 
@@ -78,6 +80,11 @@ export class SearchTableComponent implements OnInit {
 
   handleUpdate = () => {
     this.modalVisible = false;
+    Object.keys(this.editData).forEach(key => {
+      if (typeof this.editData[key] === 'boolean') {
+        this.editData[key] = this.editData[key] ? 1 : 0;
+      }
+    });
     this.update(this.editData);
   }
 
@@ -92,5 +99,7 @@ export class SearchTableComponent implements OnInit {
 
   ngOnInit(): void {
     this.searchAndRefresh();
+    this.searchColumns = this.columns.filter(v => v.searchable);
+    this.searchColumns.filter(v => v.options).forEach(v => this.searchData[v.dataIndex] = -1);
   }
 }

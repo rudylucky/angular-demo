@@ -1,8 +1,27 @@
 <div class="container-search-table">
+  <nz-collapse>
+    <nz-collapse-panel nzHeader="搜索" [nzActive]="true">
+      <div class="container-search">
+        <span *ngFor="let column of searchColumns" class="prop">
+          {{column.title}}:
+          <app-input name="column.dataIndex" ngDefaultControl [(value)]="searchData[column.dataIndex]"
+            [name]="column.dataIndex" [type]="column.type" [options]="column.options" style="display: inline-block">
+          </app-input>
+        </span>
+      </div>
+    </nz-collapse-panel>
+  </nz-collapse>
+  <div class="container-button">
+    <button nz-button nzType="primary">新增</button>
+    <button nz-button nzType="danger">删除</button>
+  </div>
   <nz-table [nzLoading]="loading" nzSize="small" [nzData]="renderedData" [nzPageIndex]="pageIndex"
-    [nzScroll]="{y: '400px'}" nzShowSizeChanger [nzTotal]="total" nzFrontPagination="false" nzShowQuickJumper
-    nzShowPagination [(nzPageSize)]="pageSize" [(nzPageIndex)]="pageIndex" (nzPageSizeChange)="searchAndRefresh()"
-    nzBordered="true" (nzPageIndexChange)="searchAndRefresh()">
+    [nzShowTotal]="rangeTemplate" [nzScroll]="{y: '400px'}" nzShowSizeChanger [nzTotal]="total"
+    nzFrontPagination="false" nzShowQuickJumper nzShowPagination [(nzPageSize)]="pageSize" [(nzPageIndex)]="pageIndex"
+    (nzPageSizeChange)="searchAndRefresh()" (nzPageIndexChange)="searchAndRefresh()">
+    <ng-template #rangeTemplate let-range="range" let-total>
+      当前 {{ range[0] }}-{{ range[1] }} 条， 共 {{ total }} 条数据
+    </ng-template>
     <thead nzSingleSort>
       <tr>
         <th nzWidth="50px" nzShowCheckbox [nzChecked]="isAllChecked" [nzIndeterminate]="isIndeterminate"
@@ -14,7 +33,9 @@
     <tbody>
       <tr *ngFor="let data of renderedData">
         <td nzShowCheckbox [(nzChecked)]="checkedList[data.key]" (nzCheckedChange)="handleCheckChange()"></td>
-        <td *ngFor="let column of columns">{{data[column.dataIndex]}}</td>
+        <td *ngFor="let column of columns">
+          <span>{{data[column.dataIndex]}}</span>
+        </td>
         <td>
           <ng-container *ngIf="update">
             <a (click)="edit(data)">编辑</a>
@@ -32,7 +53,7 @@
     <div class="container-edit">
       <span *ngFor="let column of columns" class="prop">
         {{column.title}}:
-        <app-input name="column.dataIndex" ngDefaultControl [(ngModel)]="editData[column.dataIndex]"
+        <app-input name="column.dataIndex" ngDefaultControl [(value)]="editData[column.dataIndex]"
           [name]="column.dataIndex" [type]="column.type" [options]="column.options" style="display: inline-block">
         </app-input>
       </span>
