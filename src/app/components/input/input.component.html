@@ -4,5 +4,5 @@
     <nz-option *ngFor="let option of options" [nzValue]="option.value" [nzLabel]="option.title"></nz-option>
   </nz-select>
   <nz-switch *ngSwitchCase="8" [(ngModel)]="value" (ngModelChange)="valueChange.emit(value)"></nz-switch>
-  <input *ngSwitchDefault nz-input [(ngModel)]="value" (ngModelChange)="valueChange.emit(value)" />
+  <input [name]="name" *ngSwitchDefault nz-input [(ngModel)]="value" (ngModelChange)="valueChange.emit(value)" />
 </div>

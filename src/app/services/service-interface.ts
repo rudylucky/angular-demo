@@ -45,6 +45,7 @@ export interface Column {
   dataIndex?: string;
   type?: InputType;
   options?: Array<Option>;
+  required?: boolean;
   searchable?: boolean;
   width?: number;
   render?: (value) => any;

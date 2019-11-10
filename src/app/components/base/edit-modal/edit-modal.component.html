@@ -1,0 +1,19 @@
+<nz-modal [nzVisible]="modalVisible" (nzOnCancel)="modalVisible = false" [nzClosable]="false" nzTitle="编辑"
+  (nzOnOk)="handleSave()" nzWidth="600">
+  <div class="container-edit">
+    <form nz-form [nzLayout]="'inline'" [formGroup]="validateForm" (ngSubmit)="submitForm()">
+      <nz-form-item *ngFor="let column of columns">
+        <nz-form-label [nzRequired]="column.required">{{column.title}}</nz-form-label>
+        <nz-form-control [nzErrorTip]="'请输入！' + column.title + '！'">
+          <nz-input-group>
+            <span class="prop">
+              <app-input name="column.dataIndex" ngDefaultControl [(value)]="editData[column.dataIndex]"
+                [name]="column.dataIndex" [type]="column.type" [options]="column.options" style="display: inline-block">
+              </app-input>
+            </span>
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </div>
+</nz-modal>

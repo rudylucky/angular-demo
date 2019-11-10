@@ -5,7 +5,7 @@ import { AppRoutingModule } from '@/app-routing.module';
 import { AppComponent } from '@/app.component';
 import { IconsProviderModule } from '@/icons-provider.module';
 import { NgZorroAntdModule, NZ_I18N, zh_CN } from 'ng-zorro-antd';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { registerLocaleData } from '@angular/common';
@@ -17,6 +17,7 @@ import { MySiderComponent } from '@/components/layout/my-sider/my-sider.componen
 import { UserInfoComponent } from '@/pages/system/user-info/user-info.component';
 import { SearchTableComponent } from '@/components/base/search-table/search-table.component';
 import { InputComponent } from './components/input/input.component';
+import { EditModalComponent } from './components/base/edit-modal/edit-modal.component';
 
 registerLocaleData(zh);
 
@@ -28,7 +29,8 @@ registerLocaleData(zh);
     MySiderComponent,
     UserInfoComponent,
     SearchTableComponent,
-    InputComponent
+    InputComponent,
+    EditModalComponent,
   ],
   imports: [
     BrowserModule,
@@ -36,6 +38,7 @@ registerLocaleData(zh);
     IconsProviderModule,
     NgZorroAntdModule,
     FormsModule,
+    ReactiveFormsModule,
     HttpClientModule,
     BrowserAnimationsModule
   ],

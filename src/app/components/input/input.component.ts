@@ -11,7 +11,7 @@ export class InputComponent implements OnInit {
   @Input() type;
   @Input() options;
   @Input() name;
-  @Input() value: any;
+  @Input() value;
   @Output() valueChange: EventEmitter<any> = new EventEmitter<any>();
 
   onChange = (value: any) => { };

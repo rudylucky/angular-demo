@@ -1,10 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Column, DataItem, PageData, SearchParams, ListParams, InputType, UserData } from '@/services/service-interface';
 import _ from '@/commons/utils';
-
-enum SaveType {
-  SAVE, UPDATE
-}
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-search-table',
@@ -38,11 +35,15 @@ export class SearchTableComponent implements OnInit {
   editData = {};
   searchData = {};
   searchColumns: Array<Column> = [];
-  saveType: SaveType;
 
   modalVisible = false;
 
-  constructor() { }
+  constructor(private fb: FormBuilder) { }
+
+  ngOnInit(): void {
+    this.searchAndRefresh();
+    this.resetSearch();
+  }
 
   currentPageDataChange = ($event: DataItem[]): void => {
     this.refreshStatus();
@@ -67,32 +68,14 @@ export class SearchTableComponent implements OnInit {
   preEdit = (data: UserData) => {
     this.modalVisible = true;
     this.editData = this.info(data.id);
-    this.saveType = SaveType.UPDATE;
   }
 
   preSave() {
     this.editData = {};
     this.modalVisible = true;
-    this.saveType = SaveType.SAVE;
   }
 
   handleSave = () => {
-    this.modalVisible = false;
-    const data = this.editData;
-    this.columns.filter(v => v.type === InputType.SWITCH)
-      .map(v => v.dataIndex)
-      .forEach(key => data[key] = data[key] ? 1 : 0);
-    this.columns.filter(v => v.type === InputType.SELECT)
-      .map(v => v.dataIndex)
-      .forEach(key => data[key] === -1 && delete data[key]);
-    if (this.saveType === SaveType.SAVE) {
-      this.save(data);
-    } else if (this.saveType === SaveType.UPDATE) {
-      this.update(data);
-    } else {
-      throw Error('save type error');
-    }
-    this.saveType = null;
   }
 
   private transferForRender = () => {
@@ -125,8 +108,4 @@ export class SearchTableComponent implements OnInit {
     this.searchColumns.filter(v => v.options).forEach(v => this.searchData[v.dataIndex] = -1);
   }
 
-  ngOnInit(): void {
-    this.searchAndRefresh();
-    this.resetSearch();
-  }
 }

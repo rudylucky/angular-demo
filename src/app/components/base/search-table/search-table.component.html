@@ -19,9 +19,9 @@
     <button nz-button nzType="primary" (click)="search(searchData)" class="search-button-group">搜索</button>
     <button nz-button nzType="primary" (click)="resetSearch()" class="search-button-group">重置</button>
   </div>
-  <nz-table [nzLoading]="loading" nzSize="small" [nzData]="renderedData" [nzPageIndex]="pageIndex" 
-    [nzShowTotal]="rangeTemplate" [nzScroll]="{y: 400}" nzShowSizeChanger [nzTotal]="total"
-    nzFrontPagination="false" nzShowQuickJumper nzShowPagination [(nzPageSize)]="pageSize" [(nzPageIndex)]="pageIndex"
+  <nz-table [nzLoading]="loading" nzSize="small" [nzData]="renderedData" [nzPageIndex]="pageIndex"
+    [nzShowTotal]="rangeTemplate" [nzScroll]="{y: 400}" nzShowSizeChanger [nzTotal]="total" nzFrontPagination="false"
+    nzShowQuickJumper nzShowPagination [(nzPageSize)]="pageSize" [(nzPageIndex)]="pageIndex"
     (nzPageSizeChange)="searchAndRefresh()" (nzPageIndexChange)="searchAndRefresh()">
     <ng-template #rangeTemplate let-range="range" let-total>
       当前 {{ range[0] }}-{{ range[1] }} 条， 共 {{ total }} 条数据
@@ -52,15 +52,5 @@
       </tr>
     </tbody>
   </nz-table>
-  <nz-modal [nzVisible]="modalVisible" (nzOnCancel)="modalVisible = false" [nzClosable]="false" nzTitle="编辑"
-    (nzOnOk)="handleSave()" nzWidth="600">
-    <div class="container-edit">
-      <span *ngFor="let column of columns" class="prop">
-        {{column.title}}:
-        <app-input name="column.dataIndex" ngDefaultControl [(value)]="editData[column.dataIndex]"
-          [name]="column.dataIndex" [type]="column.type" [options]="column.options" style="display: inline-block">
-        </app-input>
-      </span>
-    </div>
-  </nz-modal>
+  <app-edit-modal [columns]="columns" [save]="update" [visible]="modalVisible" (ngModelChange)="username = $event"></app-edit-modal>
 </div>

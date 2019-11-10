@@ -18,14 +18,16 @@ export class UserInfoComponent implements OnInit {
     {
       title: '姓名',
       dataIndex: 'username',
-      searchable: true
+      searchable: true,
+      required: true,
     },
     {
       title: '姓别',
       dataIndex: 'gender',
       type: InputType.SELECT,
       options: this.userService.listGenderType(),
-      searchable: true
+      searchable: true,
+      required: true,
     },
     {
       title: '邮箱',
@@ -34,7 +36,8 @@ export class UserInfoComponent implements OnInit {
     {
       title: '年龄',
       dataIndex: 'age',
-      type: InputType.NUMBER
+      type: InputType.NUMBER,
+      required: true
     },
     {
       title: '学历',
