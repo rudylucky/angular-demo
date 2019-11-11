@@ -8,8 +8,7 @@
           <nz-input-group>
             <span class="span-prop">
               <input *ngSwitchDefault nz-input [formControlName]="column.dataIndex" />
-              <nz-select *ngSwitchCase="1" [formControlName]="column.dataIndex">
-                <nz-option [nzValue]="-1" nzLabel="请选择..." nzHide></nz-option>
+              <nz-select *ngSwitchCase="1" [formControlName]="column.dataIndex" nzPlaceHolder="请选择...">
                 <nz-option *ngFor="let option of column.options" [nzValue]="option.value" [nzLabel]="option.title">
                 </nz-option>
               </nz-select>

@@ -36,10 +36,7 @@ export class EditModalComponent implements OnInit {
     const controlsConfig = {};
     this.columns.forEach(col => {
       let validators = [];
-      let defaultValue = this.editData[col.dataIndex];
-      (InputType.SELECT === col.type) && (_.isNull(this.editData[col.dataIndex])) && (defaultValue = -1);
-      (!!col.required) && (validators.push(Validators.required));
-      controlsConfig[col.dataIndex] = [defaultValue, validators];
+      controlsConfig[col.dataIndex] = [this.editData[col.dataIndex], validators];
     });
     this.validateForm = this.fb.group(controlsConfig);
   }

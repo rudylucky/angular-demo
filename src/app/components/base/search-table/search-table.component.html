@@ -20,8 +20,8 @@
     <button nz-button nzType="primary" (click)="resetSearch()" class="search-button-group">重置</button>
   </div>
   <nz-table [nzLoading]="loading" nzSize="small" [nzData]="renderedData" [nzPageIndex]="pageIndex"
-    [nzShowTotal]="rangeTemplate" [nzScroll]="{y: '400px'}" nzShowSizeChanger [nzTotal]="total" nzFrontPagination="false"
-    nzShowQuickJumper nzShowPagination [(nzPageSize)]="pageSize" [(nzPageIndex)]="pageIndex"
+    [nzShowTotal]="rangeTemplate" [nzScroll]="{y: '400px'}" nzShowSizeChanger [nzTotal]="total"
+    nzFrontPagination="false" nzShowQuickJumper nzShowPagination [(nzPageSize)]="pageSize" [(nzPageIndex)]="pageIndex"
     (nzPageSizeChange)="searchAndRefresh()" (nzPageIndexChange)="searchAndRefresh()">
     <ng-template #rangeTemplate let-range="range" let-total>
       当前 {{ range[0] }}-{{ range[1] }} 条， 共 {{ total }} 条数据
@@ -36,7 +36,7 @@
     </thead>
     <tbody>
       <tr *ngFor="let data of renderedData">
-        <td nzShowCheckbox [(nzChecked)]="checkedList[data.key]" (nzCheckedChange)="handleCheckChange()"></td>
+        <td nzShowCheckbox [(nzChecked)]="checkedList[data.id]" (nzCheckedChange)="handleCheckChange()"></td>
         <td *ngFor="let column of columns">
           <span>{{data[column.dataIndex]}}</span>
         </td>
@@ -52,5 +52,6 @@
       </tr>
     </tbody>
   </nz-table>
-  <app-edit-modal [columns]="columns" [save]="update" [editData]="editData" [visible]="modalVisible" (visibleChange)="modalVisibleChange($event)"></app-edit-modal>
+  <app-edit-modal [columns]="columns" [save]="update" [editData]="editData" [visible]="modalVisible"
+    (visibleChange)="modalVisibleChange($event)"></app-edit-modal>
 </div>
