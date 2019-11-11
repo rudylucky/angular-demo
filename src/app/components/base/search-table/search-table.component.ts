@@ -74,7 +74,6 @@ export class SearchTableComponent implements OnInit {
   preEdit = (data: UserData) => {
     this.modalVisible = true;
     this.editData = this.info(data.id);
-    console.log(this.modalVisible);
   }
 
   preSave() {

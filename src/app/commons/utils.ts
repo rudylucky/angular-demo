@@ -16,10 +16,28 @@ function randomTruth() {
   return !!range(1);
 }
 
+function isNull(obj) {
+  return !obj && obj !== 0;
+}
+
+function keys(obj: object) {
+  return Object.keys(obj);
+}
+
+function values(obj: object) {
+  if (isNull(obj)) {
+    return null;
+  }
+  return keys(obj).map(v => obj[v]);
+}
+
 const _ = {
   clone,
   range,
-  randomTruth
+  randomTruth,
+  isNull,
+  keys,
+  values
 };
 
 export default _;

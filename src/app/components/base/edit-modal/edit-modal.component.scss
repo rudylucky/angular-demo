@@ -1,0 +1,20 @@
+.prop {
+  text-align: end;
+  width: 240px;
+
+  .span-prop {
+    text-align: start;
+  }
+
+  input[nz-input] {
+    width: 160px !important;
+  }
+
+  nz-select {
+    width: 160px !important;
+  }
+
+  nz-switch {
+    width: 160px !important;
+  }
+}
