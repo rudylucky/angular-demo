@@ -9,21 +9,12 @@ import { DataItem, InputType, Column } from '@/services/service-interface';
 })
 export class EditModalComponent implements OnInit {
 
-  modalVisible: boolean;
   editData = {};
   @Input() columns: Array<Column>;
   @Input() save: (params) => any;
   @Output() visibleChange: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-  @Input()
-  public get visible(): boolean {
-    return this.modalVisible;
-  }
-
-  public set visible(value: boolean) {
-    this.modalVisible = value;
-    this.visibleChange.emit(value);
-  }
+  @Input() visible: boolean;
 
   validateForm: FormGroup;
 
@@ -46,7 +37,7 @@ export class EditModalComponent implements OnInit {
   }
 
   handleSave() {
-    this.modalVisible = false;
+    this.visibleChange.emit(false);
     const data = this.editData;
     this.columns.filter(v => v.type === InputType.SWITCH)
       .map(v => v.dataIndex)

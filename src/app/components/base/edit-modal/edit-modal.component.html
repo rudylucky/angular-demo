@@ -1,5 +1,5 @@
-<nz-modal [nzVisible]="modalVisible" (nzOnCancel)="modalVisible = false" [nzClosable]="false" nzTitle="编辑"
-  (nzOnOk)="handleSave()" nzWidth="600">
+<nz-modal [nzVisible]="visible" (nzOnCancel)="modalVisible = false" [nzClosable]="false" nzTitle="编辑"
+  (nzOnOk)="handleSave()" nzWidth="600" (nzOnCancel)="visibleChange.emit(false)">
   <div class="container-edit">
     <form nz-form [nzLayout]="'inline'" [formGroup]="validateForm" (ngSubmit)="submitForm()">
       <nz-form-item *ngFor="let column of columns">

@@ -20,7 +20,7 @@
     <button nz-button nzType="primary" (click)="resetSearch()" class="search-button-group">重置</button>
   </div>
   <nz-table [nzLoading]="loading" nzSize="small" [nzData]="renderedData" [nzPageIndex]="pageIndex"
-    [nzShowTotal]="rangeTemplate" [nzScroll]="{y: 400}" nzShowSizeChanger [nzTotal]="total" nzFrontPagination="false"
+    [nzShowTotal]="rangeTemplate" [nzScroll]="{y: '400px'}" nzShowSizeChanger [nzTotal]="total" nzFrontPagination="false"
     nzShowQuickJumper nzShowPagination [(nzPageSize)]="pageSize" [(nzPageIndex)]="pageIndex"
     (nzPageSizeChange)="searchAndRefresh()" (nzPageIndexChange)="searchAndRefresh()">
     <ng-template #rangeTemplate let-range="range" let-total>
@@ -52,5 +52,5 @@
       </tr>
     </tbody>
   </nz-table>
-  <app-edit-modal [columns]="columns" [save]="update" [visible]="modalVisible" (ngModelChange)="username = $event"></app-edit-modal>
+  <app-edit-modal [columns]="columns" [save]="update" [visible]="modalVisible" (visibleChange)="modalVisibleChange($event)"></app-edit-modal>
 </div>

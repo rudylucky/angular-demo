@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Column, DataItem, PageData, SearchParams, ListParams, InputType, UserData } from '@/services/service-interface';
 import _ from '@/commons/utils';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { $ } from 'protractor';
 
 @Component({
   selector: 'app-search-table',
@@ -45,6 +46,11 @@ export class SearchTableComponent implements OnInit {
     this.resetSearch();
   }
 
+  modalVisibleChange(visible) {
+    console.log(visible);
+    this.modalVisible = visible;
+  }
+
   currentPageDataChange = ($event: DataItem[]): void => {
     this.refreshStatus();
   }
@@ -68,6 +74,7 @@ export class SearchTableComponent implements OnInit {
   preEdit = (data: UserData) => {
     this.modalVisible = true;
     this.editData = this.info(data.id);
+    console.log(this.modalVisible);
   }
 
   preSave() {
