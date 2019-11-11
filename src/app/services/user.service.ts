@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BaseService, UserData, PageData, Option, SearchParams } from './service-interface';
 import _ from '@/commons/utils';
+import { Observable, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -35,12 +36,12 @@ export class UserService implements BaseService<UserData> {
     return _.clone(this.userData);
   }
 
-  search = (params: SearchParams): PageData<UserData> => {
+  search = (params: SearchParams): Observable<PageData<UserData>> => {
     const { pageSize, pageIndex } = params;
     const startIndex = (pageIndex - 1) * pageSize;
     let endIndex = startIndex + pageSize;
     endIndex = endIndex > this.userData.length ? this.userData.length : endIndex;
-    return new PageData(pageSize, pageIndex, this.userData.length, this.getUserData().slice(startIndex, endIndex));
+    return of(new PageData(pageSize, pageIndex, this.userData.length, this.getUserData().slice(startIndex, endIndex)));
   }
 
   list = (ids: Array<number>): Array<UserData> => {

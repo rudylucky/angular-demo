@@ -1,3 +1,5 @@
+import { Observable } from 'rxjs';
+
 export interface SearchParams {
   pageSize: number;
   pageIndex: number;
@@ -12,7 +14,7 @@ export interface UpdateParams {
 }
 
 export interface BaseService<T> {
-  search(params): PageData<T>;
+  search(params): Observable<PageData<T>>;
 }
 
 export interface UserData extends DataItem {
