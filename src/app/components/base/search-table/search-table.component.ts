@@ -111,7 +111,6 @@ export class SearchTableComponent implements OnInit {
   resetSearch = (): void => {
     this.searchColumns = this.columns.filter(v => v.searchable);
     this.searchData = {};
-    this.searchColumns.filter(v => v.options).forEach(v => this.searchData[v.dataIndex] = -1);
   }
 
 }

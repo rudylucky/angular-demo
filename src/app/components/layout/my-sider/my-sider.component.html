@@ -8,6 +8,6 @@
 <div class="menu-page" *ngIf="showPage" (mouseenter)="showPage = true">
   <div class="menu-page-item" *ngFor="let item of currentMenu.pages">
     <i nz-icon nzType="{{item.icon}}" nzTheme="fill"></i>
-    <span>{{item.name}}</span>
+    <a [routerLink]="item.path">{{item.name}}</a>
   </div>
 </div>

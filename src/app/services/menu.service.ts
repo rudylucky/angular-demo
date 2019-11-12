@@ -29,10 +29,10 @@ export default class MenuService {
         icon: 'setting',
         pages: [
           {
-            name: '系统页面',
+            name: '用户设置',
             code: 'system',
             icon: 'setting',
-            path: '/system'
+            path: '/user-info'
           },
         ]
       }, {

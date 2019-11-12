@@ -1,6 +1,5 @@
 <div [ngSwitch]="type">
-  <nz-select *ngSwitchCase="1" [(ngModel)]="value" (ngModelChange)="valueChange.emit(value)">
-    <nz-option [nzValue]="-1" nzLabel="请选择..." nzHide></nz-option>
+  <nz-select *ngSwitchCase="1" [(ngModel)]="value" (ngModelChange)="valueChange.emit(value)" nzPlaceHolder="请选择...">
     <nz-option *ngFor="let option of options" [nzValue]="option.value" [nzLabel]="option.title"></nz-option>
   </nz-select>
   <nz-switch *ngSwitchCase="8" [(ngModel)]="value" (ngModelChange)="valueChange.emit(value)"></nz-switch>
