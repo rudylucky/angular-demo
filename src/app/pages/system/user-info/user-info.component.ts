@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UserService } from '@/services/user.service';
 import { Column, InputType } from '@/services/service-interface';
 import _ from '@/commons/utils';
+import consts from '@/commons/constants';
 
 @Component({
   selector: 'app-user-info',
@@ -53,13 +54,13 @@ export class UserInfoComponent implements OnInit {
       title: '转正状态',
       dataIndex: 'regular',
       type: InputType.SWITCH,
-      options: this.userService.listBoolType()
+      options: consts.BooleanType,
     },
     {
       title: '在职状态',
       dataIndex: 'inPosition',
       type: InputType.SWITCH,
-      options: this.userService.listBoolType()
+      options: consts.BooleanType,
     }
   ];
 

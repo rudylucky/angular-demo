@@ -80,13 +80,4 @@ export class UserService implements BaseService<UserData> {
       title: '博士',
     }];
   }
-  listBoolType(): Array<Option> {
-    return [{
-      value: 1,
-      title: '是'
-    }, {
-      value: 0,
-      title: '否'
-    }];
-  }
 }

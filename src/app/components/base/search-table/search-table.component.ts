@@ -3,6 +3,7 @@ import { Column, DataItem, PageData, SearchParams, ListParams, InputType, UserDa
 import _ from '@/commons/utils';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { $ } from 'protractor';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-search-table',
@@ -16,7 +17,7 @@ export class SearchTableComponent implements OnInit {
 
   @Input() update: (params) => any;
   @Input() delete: (params) => any;
-  @Input() search: (params: SearchParams) => PageData<any>;
+  @Input() search: (params: SearchParams) => Observable<PageData<any>>;
   @Input() list: (params: ListParams) => Array<any>;
   @Input() info: (params: number) => any;
   @Input() save: (params) => any;
@@ -47,7 +48,6 @@ export class SearchTableComponent implements OnInit {
   }
 
   modalVisibleChange(visible) {
-    console.log(visible);
     this.modalVisible = visible;
   }
 
@@ -61,9 +61,12 @@ export class SearchTableComponent implements OnInit {
   }
 
   searchAndRefresh = () => {
-    const pageData = this.search({
+    let pageData: PageData<DataItem>;
+    this.search({
       pageSize: this.pageSize,
       pageIndex: this.pageIndex
+    }).subscribe(resp => {
+      pageData = resp;
     });
     this.total = pageData.total;
     this.tableData = pageData.records;
