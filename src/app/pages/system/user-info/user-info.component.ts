@@ -26,7 +26,7 @@ export class UserInfoComponent implements OnInit {
       title: '姓别',
       dataIndex: 'gender',
       type: InputType.SELECT,
-      options: this.userService.listGenderType(),
+      options: this.listGenderType(),
       searchable: true,
       required: true,
     },
@@ -44,7 +44,7 @@ export class UserInfoComponent implements OnInit {
       title: '学历',
       dataIndex: 'degree',
       type: InputType.SELECT,
-      options: this.userService.listDegreeType()
+      options: this.listDegreeType(),
     },
     {
       title: '户籍',
@@ -67,6 +67,18 @@ export class UserInfoComponent implements OnInit {
   constructor(private userService: UserService) { }
 
   ngOnInit() {
+  }
+
+  listGenderType() {
+    let genderType;
+    this.userService.listGenderType().subscribe(v => genderType = v);
+    return genderType;
+  }
+
+  listDegreeType() {
+    let degreeType;
+    this.userService.listDegreeType().subscribe(v => degreeType = v);
+    return degreeType;
   }
 
   save = (data) => {

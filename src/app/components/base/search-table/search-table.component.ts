@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Column, DataItem, PageData, SearchParams, ListParams, InputType, UserData } from '@/services/service-interface';
+import { Column, DataItem, PageData, SearchParam, InputType, UserData } from '@/services/service-interface';
 import _ from '@/commons/utils';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { $ } from 'protractor';
@@ -17,9 +17,9 @@ export class SearchTableComponent implements OnInit {
 
   @Input() update: (params) => any;
   @Input() delete: (params) => any;
-  @Input() search: (params: SearchParams) => Observable<PageData<any>>;
-  @Input() list: (params: ListParams) => Array<any>;
-  @Input() info: (params: number) => any;
+  @Input() search: (params: SearchParam) => Observable<PageData<any>>;
+  @Input() list: (params) => Array<any>;
+  @Input() info: (params) => any;
   @Input() save: (params) => any;
 
   renderedData = [];

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BaseService, UserData, PageData, Option, SearchParams } from './service-interface';
+import { BaseService, UserData, PageData, Option, SearchParam } from './service-interface';
 import _ from '@/commons/utils';
 import { Observable, of } from 'rxjs';
 
@@ -36,7 +36,19 @@ export class UserService implements BaseService<UserData> {
     return _.clone(this.userData);
   }
 
-  search = (params: SearchParams): Observable<PageData<UserData>> => {
+  update(params: UserData): Observable<boolean> {
+    return of(true);
+  }
+
+  delete(params: number): Observable<boolean> {
+    return of(true);
+  }
+
+  save(params: UserData): Observable<boolean> {
+    return of(true);
+  }
+
+  search = (params: SearchParam): Observable<PageData<UserData>> => {
     const { pageSize, pageIndex } = params;
     const startIndex = (pageIndex - 1) * pageSize;
     let endIndex = startIndex + pageSize;
@@ -44,26 +56,26 @@ export class UserService implements BaseService<UserData> {
     return of(new PageData(pageSize, pageIndex, this.userData.length, this.getUserData().slice(startIndex, endIndex)));
   }
 
-  list = (ids: Array<number>): Array<UserData> => {
-    return this.getUserData().filter(v => ids.includes(v.id));
+  list = (ids: Array<number>): Observable<Array<UserData>> => {
+    return of(this.getUserData().filter(v => ids.includes(v.id)));
   }
 
-  info = (id: number): UserData => {
-    return this.getUserData().find(v => v.id === id);
+  info = (id: number): Observable<UserData> => {
+    return of(this.getUserData().find(v => v.id === id));
   }
 
-  listGenderType(): Array<Option> {
-    return [{
+  listGenderType(): Observable<Array<Option>> {
+    return of([{
       value: 0,
       title: '男'
     }, {
       value: 1,
       title: '女'
-    }];
+    }]);
   }
 
-  listDegreeType(): Array<Option> {
-    return [{
+  listDegreeType(): Observable<Array<Option>> {
+    return of([{
       value: 0,
       title: '小学',
     }, {
@@ -78,6 +90,6 @@ export class UserService implements BaseService<UserData> {
     }, {
       value: 4,
       title: '博士',
-    }];
+    }]);
   }
 }

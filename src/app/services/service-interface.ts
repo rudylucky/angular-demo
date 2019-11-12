@@ -1,20 +1,17 @@
 import { Observable } from 'rxjs';
 
-export interface SearchParams {
+export interface SearchParam {
   pageSize: number;
   pageIndex: number;
 }
 
-export interface ListParams {
-  [index: number]: number;
-}
-
-export interface UpdateParams {
-  id: number;
-}
-
 export interface BaseService<T> {
-  search(params): Observable<PageData<T>>;
+  search(params: SearchParam): Observable<PageData<T>>;
+  list(params: Array<number>): Observable<Array<T>>;
+  info(params: number): Observable<T>;
+  update(params: T): Observable<boolean>;
+  delete(params: number): Observable<boolean>;
+  save(params: T): Observable<boolean>;
 }
 
 export interface UserData extends DataItem {
