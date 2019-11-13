@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BaseService, UserData, PageData, Option, SearchParam } from './service-interface';
-import _ from '@/commons/utils';
+import { BaseService, UserData, PageData, Option, SearchParam } from '@/commons/interfaces/service-interface';
+import _ from '@/commons/utils/utils';
 import { Observable, of } from 'rxjs';
 
 @Injectable({

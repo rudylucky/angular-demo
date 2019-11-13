@@ -1,8 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Column, DataItem, PageData, SearchParam, InputType, UserData } from '@/services/service-interface';
-import _ from '@/commons/utils';
+import { Column, DataItem, PageData, SearchParam, InputType, UserData } from '@/commons/interfaces/service-interface';
+import _ from '@/commons/utils/utils';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { $ } from 'protractor';
 import { Observable } from 'rxjs';
 
 @Component({

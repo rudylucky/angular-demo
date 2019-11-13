@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { DataItem, InputType, Column } from '@/services/service-interface';
-import _ from '@/commons/utils';
+import { DataItem, InputType, Column } from '@/commons/interfaces/service-interface';
+import _ from '@/commons/utils/utils';
 
 @Component({
   selector: 'app-edit-modal',

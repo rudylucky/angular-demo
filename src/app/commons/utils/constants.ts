@@ -1,4 +1,4 @@
-import { Option } from '@/services/service-interface';
+import { Option } from '@/commons/interfaces/service-interface';
 
 const BooleanType: Array<Option> = [{
   value: 1,

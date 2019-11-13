@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService } from '@/services/user.service';
-import { Column, InputType } from '@/services/service-interface';
-import _ from '@/commons/utils';
-import consts from '@/commons/constants';
+import { Column, InputType } from '@/commons/interfaces/service-interface';
+import consts from '@/commons/utils/constants';
+import { UserService } from '@/system/services/user.service';
 
 @Component({
   selector: 'app-user-info',
