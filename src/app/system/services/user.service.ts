@@ -1,70 +1,40 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { BaseService, UserData, PageData, Option, SearchParam } from '@/commons/interfaces/service-interface';
-import _ from '@/commons/utils/utils';
+import { BaseService, UserData, SearchParam, PageData, Option } from '@/commons/interfaces/service-interface';
+import HttpClientUtil from '@/commons/utils/httpclient';
 import { Observable, of } from 'rxjs';
+import { SystemModule } from '@/system/system.module';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class UserService implements BaseService<UserData> {
 
-  private userData: Array<UserData>;
-
-  constructor(private http: HttpClient) {
-    this.mockData();
+  constructor(private httpClient: HttpClientUtil) {
   }
 
-  private mockData(): void {
-    if (this.userData) {
-      return;
-    }
-    this.userData = Array(200).fill({}).map((item, index) => ({
-      id: index,
-      username: 'name' + index,
-      gender: _.range(1),
-      email: 'email' + index,
-      age: index,
-      censusRegister: '江苏',
-      degree: _.range(4),
-      inPosition: _.range(),
-      regular: _.range()
-    }));
-  }
-
-  getUserData() {
-    return _.clone(this.userData);
-  }
-
-  update(params: UserData): Observable<boolean> {
-    return of(true);
-  }
-
-  delete(params: number): Observable<boolean> {
-    return of(true);
-  }
-
-  save(params: UserData): Observable<boolean> {
-    return of(true);
+  get = (params: SearchParam) => {
+    return this.httpClient.post('http://192.168.1.134:5000/system-service/sys/user/info', params).toPromise();
   }
 
   search = (params: SearchParam): Observable<PageData<UserData>> => {
-    const { pageSize, pageIndex } = params;
-    const startIndex = (pageIndex - 1) * pageSize;
-    let endIndex = startIndex + pageSize;
-    endIndex = endIndex > this.userData.length ? this.userData.length : endIndex;
-    return of(new PageData(pageSize, pageIndex, this.userData.length, this.getUserData().slice(startIndex, endIndex)));
+    return this.httpClient.post('http://192.168.1.134:5000/system-service/sys/user/info', params);
   }
 
-  list = (ids: Array<number>): Observable<Array<UserData>> => {
-    return of(this.getUserData().filter(v => ids.includes(v.id)));
+  list = (params: number[]): Observable<UserData[]> => {
+    throw new Error("Method not implemented.");
+  }
+  info = (params: number): Observable<UserData> => {
+    throw new Error("Method not implemented.");
+  }
+  update = (params: UserData): Observable<boolean> => {
+    throw new Error("Method not implemented.");
+  }
+  delete = (params: number): Observable<boolean> => {
+    throw new Error("Method not implemented.");
+  }
+  save = (params: UserData): Observable<boolean> => {
+    throw new Error("Method not implemented.");
   }
 
-  info = (id: number): Observable<UserData> => {
-    return of(this.getUserData().find(v => v.id === id));
-  }
-
-  listGenderType(): Observable<Array<Option>> {
+  listGenderType = (): Observable<Array<Option>> => {
     return of([{
       value: 0,
       title: '男'
@@ -74,7 +44,7 @@ export class UserService implements BaseService<UserData> {
     }]);
   }
 
-  listDegreeType(): Observable<Array<Option>> {
+  listDegreeType = (): Observable<Array<Option>> => {
     return of([{
       value: 0,
       title: '小学',

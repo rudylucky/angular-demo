@@ -9,6 +9,7 @@ import { NgZorroAntdModule, NZ_I18N, zh_CN } from 'ng-zorro-antd';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import HttpClientUtil from './utils/httpclient';
 
 
 @NgModule({
@@ -40,6 +41,5 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     InputComponent,
     EditModalComponent,
   ],
-  providers: [{ provide: NZ_I18N, useValue: zh_CN }],
 })
 export class CommonsModule { }

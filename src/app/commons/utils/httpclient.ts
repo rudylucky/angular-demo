@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Inject } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
+import { Observable, of } from 'rxjs';
 
 interface HttpOption {
   headers?: HttpHeaders | {
@@ -14,7 +15,15 @@ interface HttpOption {
   withCredentials?: boolean;
 }
 
-export default class HttpClientUtils {
+interface Response {
+  status: number;
+  errorCode: number;
+  errorMessage: string;
+  data: object | [];
+}
+
+@Injectable({ providedIn: 'root' })
+export default class HttpClientUtil {
 
   private httpClient: HttpClient;
 
@@ -22,20 +31,20 @@ export default class HttpClientUtils {
     this.httpClient = httpClient;
   }
 
-  get(url: string, params?: object) {
-    this.httpClient.get(url, this.wrap(params));
+  get(url: string, params?: object): Observable<any> {
+    return this.httpClient.get(url, this.wrap(params));
   }
 
-  post(url: string, params: object) {
-    this.httpClient.get(url, this.wrap(params));
+  post(url: string, params?: object): Observable<any> {
+    return this.httpClient.get(url, this.wrap(params));
   }
 
-  delete(url: string, params: object) {
-    this.httpClient.delete(url, this.wrap(params));
+  delete(url: string, params: object): Observable<any> {
+    return this.httpClient.delete(url, this.wrap(params));
   }
 
-  put(url: string, params: object) {
-    this.httpClient.put(url, this.wrap(params));
+  put(url: string, params: object): Observable<any> {
+    return this.httpClient.put(url, this.wrap(params));
   }
 
   private wrap(params: object): HttpOption {

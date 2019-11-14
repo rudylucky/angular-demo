@@ -14,6 +14,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CommonsModule } from '@/commons/commons.module';
 import { WelcomeComponent } from '@/system/components/welcome/welcome.component';
+import { UserService } from './services/user.service';
+import HttpClientUtil from '@/commons/utils/httpclient';
 
 
 @NgModule({
@@ -33,6 +35,9 @@ import { WelcomeComponent } from '@/system/components/welcome/welcome.component'
     BrowserAnimationsModule,
     CommonsModule,
   ],
-  providers: [{ provide: NZ_I18N, useValue: zh_CN }],
+  providers: [
+    { provide: NZ_I18N, useValue: zh_CN },
+    UserService
+  ],
 })
 export class SystemModule { }

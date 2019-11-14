@@ -63,7 +63,8 @@ export class UserInfoComponent implements OnInit {
     }
   ];
 
-  constructor(private userService: UserService) { }
+  constructor(private userService: UserService) {
+  }
 
   ngOnInit() {
   }
