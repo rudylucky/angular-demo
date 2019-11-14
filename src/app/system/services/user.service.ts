@@ -3,19 +3,24 @@ import { BaseService, UserData, SearchParam, PageData, Option } from '@/commons/
 import HttpClientUtil from '@/commons/utils/httpclient';
 import { Observable, of } from 'rxjs';
 import { SystemModule } from '@/system/system.module';
+import _ from '@/commons/utils/utils';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class UserService implements BaseService<UserData> {
 
-  constructor(private httpClient: HttpClientUtil) {
+  constructor(private httpClient: HttpClient) {
   }
 
   get = (params: SearchParam) => {
-    return this.httpClient.post('http://192.168.1.134:5000/system-service/sys/user/info', params).toPromise();
+  }
+
+  do() {
+    return this.httpClient.post('http://localhost:5000/system/user/info', _.queryString({code: 'a'})).toPromise();
   }
 
   search = (params: SearchParam): Observable<PageData<UserData>> => {
-    return this.httpClient.post('http://192.168.1.134:5000/system-service/sys/user/info', params);
+    return null;
   }
 
   list = (params: number[]): Observable<UserData[]> => {

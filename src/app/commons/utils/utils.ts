@@ -31,8 +31,16 @@ function values(obj: object) {
   return keys(obj).map(v => obj[v]);
 }
 
+function queryString(obj: object): string {
+  return Object.getOwnPropertyNames(obj)
+    .map(v => obj[v])
+    .reduce((a, b) => a + '&' + b + '=' + obj[b], '')
+    .substring(1);
+}
+
 const _ = {
   clone,
+  queryString,
   range,
   randomTruth,
   isNull,
