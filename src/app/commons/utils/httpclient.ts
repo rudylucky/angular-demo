@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
+import { HOSTNAME, PORT } from "@/commons/config/config";
 
 interface HttpOption {
   headers?: HttpHeaders | {
@@ -25,30 +26,38 @@ interface Response {
 @Injectable({ providedIn: 'root' })
 export default class HttpClientUtil {
 
-  private httpClient: HttpClient;
-
-  constructor(@Inject(HttpClient) httpClient) {
-    this.httpClient = httpClient;
+  constructor(private httpClient: HttpClient) {
   }
 
-  get(url: string, params?: object): Observable<any> {
-    return this.httpClient.get(url, this.wrap(params));
+  private assembleUrl(url: string) {
+    return `http://${HOSTNAME}:${PORT}/${url}`;
   }
 
-  post(url: string, params?: object): Observable<any> {
-    return this.httpClient.get(url, this.wrap(params));
+  get(url: string, param?: string): Promise<any> {
+    return this.httpClient.get(this.assembleUrl(url) + param).toPromise().then(this.checkError);
   }
 
-  delete(url: string, params: object): Observable<any> {
-    return this.httpClient.delete(url, this.wrap(params));
+  post(url: string, params?: object): Promise<any> {
+    return this.httpClient.post(this.assembleUrl(url), this.wrap(params)).toPromise().then(this.checkError);
   }
 
-  put(url: string, params: object): Observable<any> {
-    return this.httpClient.put(url, this.wrap(params));
+  delete(url: string, params: object): Promise<any> {
+    return this.httpClient.delete(this.assembleUrl(url), this.wrap(params)).toPromise();
+  }
+
+  put(url: string, params: object): Promise<any> {
+    return this.httpClient.put(this.assembleUrl(url), this.wrap(params)).toPromise();
   }
 
   private wrap(params: object): HttpOption {
-    return {};
+    return params;
+  }
+
+  private checkError(response: Response) {
+    if (response.status) {
+      throw new Error(response.errorMessage);
+    }
+    return response.data;
   }
 
 }

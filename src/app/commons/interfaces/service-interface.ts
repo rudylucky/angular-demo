@@ -6,12 +6,12 @@ export interface SearchParam {
 }
 
 export interface BaseService<T> {
-  search(params: SearchParam): Observable<PageData<T>>;
-  list(params: Array<number>): Observable<Array<T>>;
-  info(params: number): Observable<T>;
-  update(params: T): Observable<boolean>;
-  delete(params: number): Observable<boolean>;
-  save(params: T): Observable<boolean>;
+  search(params: SearchParam): Promise<PageData<T>>;
+  list(params: Array<number>): Promise<Array<T>>;
+  info(params: number): Promise<T>;
+  update(params: T): Promise<boolean>;
+  delete(params: number): Promise<boolean>;
+  save(params: T): Promise<boolean>;
 }
 
 export interface UserData extends DataItem {
@@ -72,6 +72,6 @@ export enum InputType {
 }
 
 export interface Option {
-  value: number;
+  value: boolean | number;
   title: string;
 }

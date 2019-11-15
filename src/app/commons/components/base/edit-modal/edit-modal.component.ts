@@ -12,7 +12,7 @@ export class EditModalComponent implements OnInit {
 
   data: object;
   @Input() columns: Array<Column>;
-  @Input() save: (params) => any;
+  @Input() onSubmit: (params) => any;
   @Output() visibleChange: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Input() visible: boolean;
 
@@ -70,7 +70,7 @@ export class EditModalComponent implements OnInit {
     this.columns.filter(v => v.type === InputType.SELECT)
       .map(v => v.dataIndex)
       .forEach(key => (data[key] === -1) && (delete data[key]));
-    this.save(data);
+    this.onSubmit(data);
   }
 
   handleCancel() {

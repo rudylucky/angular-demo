@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Column, InputType } from '@/commons/interfaces/service-interface';
 import consts from '@/commons/utils/constants';
-import { UserService } from '@/system/services/user.service';
+import { UserService } from '@/system/services/mock/user.service';
 
 @Component({
   selector: 'app-user-info',
   templateUrl: './user-info.component.html',
-  styleUrls: ['./user-info.component.scss']
+  styleUrls: ['./user-info.component.scss'],
+  providers: [UserService]
 })
 export class UserInfoComponent implements OnInit {
 
@@ -51,20 +52,19 @@ export class UserInfoComponent implements OnInit {
     },
     {
       title: '转正状态',
-      dataIndex: 'regular',
+      dataIndex: 'positiveStatus',
       type: InputType.SWITCH,
       options: consts.BooleanType,
     },
     {
       title: '在职状态',
-      dataIndex: 'inPosition',
+      dataIndex: 'positionStatus',
       type: InputType.SWITCH,
       options: consts.BooleanType,
     }
   ];
 
   constructor(private userService: UserService) {
-    userService.do();
   }
 
   ngOnInit() {
@@ -83,7 +83,7 @@ export class UserInfoComponent implements OnInit {
   }
 
   save = (data) => {
-    console.log('save', data);
+    this.userService.save(data);
   }
 
   update = (data) => {

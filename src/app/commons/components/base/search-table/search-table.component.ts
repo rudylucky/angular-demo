@@ -4,6 +4,10 @@ import _ from '@/commons/utils/utils';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 
+enum ModalType {
+  EDIT, SAVE
+}
+
 @Component({
   selector: 'app-search-table',
   templateUrl: './search-table.component.html',
@@ -16,7 +20,7 @@ export class SearchTableComponent implements OnInit {
 
   @Input() update: (params) => any;
   @Input() delete: (params) => any;
-  @Input() search: (params: SearchParam) => Observable<PageData<any>>;
+  @Input() search: (params: SearchParam) => Promise<PageData<any>>;
   @Input() list: (params) => Array<any>;
   @Input() info: (params) => any;
   @Input() save: (params) => any;
@@ -38,6 +42,7 @@ export class SearchTableComponent implements OnInit {
   searchColumns: Array<Column> = [];
 
   modalVisible = false;
+  modalType: ModalType;
 
   constructor(private fb: FormBuilder) { }
 
@@ -59,14 +64,12 @@ export class SearchTableComponent implements OnInit {
     this.refreshStatus();
   }
 
-  searchAndRefresh = () => {
-    let pageData: PageData<DataItem>;
-    this.search({
+  searchAndRefresh = async () => {
+    let pageData: PageData<DataItem> = await this.search({
       pageSize: this.pageSize,
       pageIndex: this.pageIndex
-    }).subscribe(resp => {
-      pageData = resp;
-    });
+    })
+    console.log('pageData', pageData);
     this.total = pageData.total;
     this.tableData = pageData.records;
     this.loading = false;
@@ -75,23 +78,37 @@ export class SearchTableComponent implements OnInit {
 
   preEdit = (data: UserData) => {
     this.modalVisible = true;
+    this.modalType = ModalType.EDIT
     this.editData = this.info(data.id);
   }
 
   preSave() {
-    this.editData = {};
     this.modalVisible = true;
+    this.modalType = ModalType.SAVE;
+    this.editData = {};
   }
 
-  handleSave = () => {
+  handleModalSubmit() {
+    if (this.modalType === ModalType.EDIT) {
+      this.update(this.editData);
+    } else if (this.modalType === ModalType.SAVE) {
+      this.save(this.editData);
+    } else {
+      throw new Error('modal type error');
+    }
   }
 
   private transferForRender = () => {
+    console.log(this.tableData);
     this.renderedData = _.clone(this.tableData);
     this.columns.filter(element => [InputType.SELECT, InputType.SWITCH].includes(element.type))
       .forEach(element => {
         this.renderedData.forEach(v => {
-          v[element.dataIndex] = element.options.find(option => option.value === v[element.dataIndex]).title;
+          const item = element.options.find(option => option.value === v[element.dataIndex]);
+          if (_.isNull(item)) {
+            return;
+          }
+          v[element.dataIndex] = item.title;
         });
       });
   }

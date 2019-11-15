@@ -3,12 +3,14 @@ import { HttpClient } from '@angular/common/http';
 import { BaseService, UserData, PageData, Option, SearchParam } from '@/commons/interfaces/service-interface';
 import _ from '@/commons/utils/utils';
 import { Observable, of } from 'rxjs';
+import HttpClientUtil from '@/commons/utils/httpclient';
 
+@Injectable()
 export class UserService implements BaseService<UserData> {
 
   private userData: Array<UserData>;
 
-  constructor(private http: HttpClient) {
+  constructor(private httpClient: HttpClientUtil) {
     this.mockData();
   }
 
@@ -29,36 +31,28 @@ export class UserService implements BaseService<UserData> {
     }));
   }
 
-  getUserData() {
-    return _.clone(this.userData);
+  update = (params: UserData): Promise<boolean> => {
+    return null;
   }
 
-  update(params: UserData): Observable<boolean> {
-    return of(true);
+  delete = (params: number): Promise<boolean> => {
+    return null;
   }
 
-  delete(params: number): Observable<boolean> {
-    return of(true);
+  save = (params: UserData): Promise<boolean> => {
+    return this.httpClient.post('/system/user/save', params);
   }
 
-  save(params: UserData): Observable<boolean> {
-    return of(true);
+  search = (params: SearchParam): Promise<PageData<UserData>> => {
+    return this.httpClient.post('/system/user/search', params);
   }
 
-  search = (params: SearchParam): Observable<PageData<UserData>> => {
-    const { pageSize, pageIndex } = params;
-    const startIndex = (pageIndex - 1) * pageSize;
-    let endIndex = startIndex + pageSize;
-    endIndex = endIndex > this.userData.length ? this.userData.length : endIndex;
-    return of(new PageData(pageSize, pageIndex, this.userData.length, this.getUserData().slice(startIndex, endIndex)));
+  list = (ids: Array<number>): Promise<Array<UserData>> => {
+    return null;
   }
 
-  list = (ids: Array<number>): Observable<Array<UserData>> => {
-    return of(this.getUserData().filter(v => ids.includes(v.id)));
-  }
-
-  info = (id: number): Observable<UserData> => {
-    return of(this.getUserData().find(v => v.id === id));
+  info = (id: number): Promise<UserData> => {
+    return null;
   }
 
   listGenderType(): Observable<Array<Option>> {

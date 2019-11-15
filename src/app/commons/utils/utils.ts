@@ -33,7 +33,6 @@ function values(obj: object) {
 
 function queryString(obj: object): string {
   return Object.getOwnPropertyNames(obj)
-    .map(v => obj[v])
     .reduce((a, b) => a + '&' + b + '=' + obj[b], '')
     .substring(1);
 }

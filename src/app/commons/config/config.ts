@@ -2,8 +2,8 @@ import { isNonEmptyString } from 'ng-zorro-antd';
 
 export enum PROFILE { DEV, TEST };
 
-const HOSTNAME = '192.168.1.126';
-const PORT = '8080';
+export const HOSTNAME = 'localhost';
+export const PORT = '5000';
 
 const $ = {
   HOSTNAME,

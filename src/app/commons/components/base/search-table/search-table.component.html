@@ -52,6 +52,6 @@
       </tr>
     </tbody>
   </nz-table>
-  <app-edit-modal [columns]="columns" [save]="update" [editData]="editData" [visible]="modalVisible"
+  <app-edit-modal [columns]="columns" [onSubmit]="handleModalSubmit" [editData]="editData" [visible]="modalVisible"
     (visibleChange)="modalVisibleChange($event)"></app-edit-modal>
 </div>

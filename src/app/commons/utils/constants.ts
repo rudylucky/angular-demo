@@ -1,10 +1,10 @@
 import { Option } from '@/commons/interfaces/service-interface';
 
 const BooleanType: Array<Option> = [{
-  value: 1,
+  value: true,
   title: '是'
 }, {
-  value: 0,
+  value: false,
   title: '否'
 }];
 
