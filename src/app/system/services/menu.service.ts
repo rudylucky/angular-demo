@@ -34,6 +34,12 @@ export default class MenuService {
             icon: 'setting',
             path: '/user-info'
           },
+          {
+            name: '角色设置',
+            code: 'system',
+            icon: 'setting',
+            path: '/role-info'
+          },
         ]
       }, {
         name: '基础',

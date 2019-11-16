@@ -32,9 +32,16 @@ function values(obj: object) {
 }
 
 function queryString(obj: object): string {
-  return Object.getOwnPropertyNames(obj)
-    .reduce((a, b) => a + '&' + b + '=' + obj[b], '')
+  const s = Object.getOwnPropertyNames(obj)
+    .reduce((a, b) => {
+      const value = obj[b];
+      if (value instanceof Array) {
+        return value.reduce((x, y) => `${x}&${a}=${y}`);
+      }
+      return `${a}&${b}=${value}`;
+    }, '')
     .substring(1);
+  return s;
 }
 
 const _ = {

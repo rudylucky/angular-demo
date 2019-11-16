@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Column, InputType } from '@/commons/interfaces/service-interface';
+import { Column, InputType, DataItem } from '@/commons/interfaces/service-interface';
 import consts from '@/commons/utils/constants';
-import { UserService } from '@/system/services/mock/user.service';
+import { UserService } from '@/system/services/user.service';
 
 @Component({
   selector: 'app-user-info',
@@ -38,7 +38,7 @@ export class UserInfoComponent implements OnInit {
       title: '年龄',
       dataIndex: 'age',
       type: InputType.NUMBER,
-      required: true
+      required: true,
     },
     {
       title: '学历',
@@ -48,7 +48,7 @@ export class UserInfoComponent implements OnInit {
     },
     {
       title: '户籍',
-      dataIndex: 'censusRegister',
+      dataIndex: 'census',
     },
     {
       title: '转正状态',
@@ -83,15 +83,26 @@ export class UserInfoComponent implements OnInit {
   }
 
   save = (data) => {
-    this.userService.save(data);
+    return this.userService.save(data);
   }
 
   update = (data) => {
-    console.log('update', data);
+    return this.userService.update(data);
   }
 
-  delete = (data) => {
-    console.log('delete', data);
+  delete = (data: UserData) => {
+    return this.userService.delete(data.id);
   }
 
+}
+
+export interface UserData extends DataItem {
+  username: string;
+  gender: number;
+  email: string;
+  age: number;
+  censusRegister: string;
+  degree: number;
+  inPosition: number;
+  regular: number;
 }

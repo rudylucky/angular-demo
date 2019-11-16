@@ -1,39 +1,53 @@
 import { Observable } from 'rxjs';
+import HttpClientUtil from '../utils/httpclient';
 
 export interface SearchParam {
   pageSize: number;
-  pageIndex: number;
+  currentPage: number;
 }
 
-export interface BaseService<T> {
-  search(params: SearchParam): Promise<PageData<T>>;
-  list(params: Array<number>): Promise<Array<T>>;
-  info(params: number): Promise<T>;
-  update(params: T): Promise<boolean>;
-  delete(params: number): Promise<boolean>;
-  save(params: T): Promise<boolean>;
-}
+export abstract class BaseService<T> {
 
-export interface UserData extends DataItem {
-  username: string;
-  gender: number;
-  email: string;
-  age: number;
-  censusRegister: string;
-  degree: number;
-  inPosition: number;
-  regular: number;
+  constructor(protected httpClient: HttpClientUtil) {
+  }
+
+  protected abstract prefix(): string;
+
+  update = (params: DataItem): Promise<boolean> => {
+    return this.httpClient.post(`${this.prefix()}/update`, params);
+  }
+
+  delete = (ids: number | Array<number>): Promise<boolean> => {
+    return this.httpClient.delete(`${this.prefix()}/delete`, { ids });
+  }
+
+  save = (params: DataItem): Promise<boolean> => {
+    return this.httpClient.post(`${this.prefix()}/save`, params);
+  }
+
+  search = (params: SearchParam): Promise<PageData<DataItem>> => {
+    return this.httpClient.post(`${this.prefix()}/search`, params);
+  }
+
+  list = (ids: Array<number>): Promise<Array<DataItem>> => {
+    return this.httpClient.post(`${this.prefix()}/list`, ids);
+  }
+
+  info = (code: number): Promise<DataItem> => {
+    return this.httpClient.get(`${this.prefix()}/info`, { code });
+  }
+
 }
 
 export class PageData<T> {
   pageSize: number;
-  pageIndex: number;
+  currentPage: number;
   total: number;
   records: Array<T>;
 
   constructor(pageSize: number, pageIndex: number, total: number, records: T[]) {
     this.pageSize = pageSize;
-    this.pageIndex = pageIndex;
+    this.currentPage = pageIndex;
     this.total = total;
     this.records = records;
   }
@@ -46,12 +60,13 @@ export interface Column {
   options?: Array<Option>;
   required?: boolean;
   searchable?: boolean;
-  width?: number;
+  width?: number | string;
   render?: (value) => any;
 }
 
 export interface DataItem {
   id: number;
+  code: string;
 }
 
 export interface TableData {

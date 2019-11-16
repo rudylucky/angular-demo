@@ -16,22 +16,22 @@
     <button nz-button nzType="primary">导入</button>
     <button nz-button nzType="primary">导出</button>
     <button nz-button nzType="danger">删除</button>
-    <button nz-button nzType="primary" (click)="search(searchData)" class="search-button-group">搜索</button>
-    <button nz-button nzType="primary" (click)="resetSearch()" class="search-button-group">重置</button>
+    <button nz-button nzType="primary" (click)="handleSearch()" class="search-button-group">搜索</button>
+    <button nz-button nzType="primary" (click)="searchData = {}" class="search-button-group">重置</button>
   </div>
   <nz-table [nzLoading]="loading" nzSize="small" [nzData]="renderedData" [nzPageIndex]="pageIndex"
-    [nzShowTotal]="rangeTemplate" [nzScroll]="{y: '400px'}" nzShowSizeChanger [nzTotal]="total"
+    [nzShowTotal]="rangeTemplate" nzShowSizeChanger [nzTotal]="total" [nzScroll]="{ x: '800px' }"
     nzFrontPagination="false" nzShowQuickJumper nzShowPagination [(nzPageSize)]="pageSize" [(nzPageIndex)]="pageIndex"
-    (nzPageSizeChange)="searchAndRefresh()" (nzPageIndexChange)="searchAndRefresh()">
+    (nzPageSizeChange)="handleSearch()" (nzPageIndexChange)="handleSearch()">
     <ng-template #rangeTemplate let-range="range" let-total>
       当前 {{ range[0] }}-{{ range[1] }} 条， 共 {{ total }} 条数据
     </ng-template>
     <thead nzSingleSort>
       <tr>
-        <th nzWidth="50px" nzShowCheckbox [nzChecked]="isAllChecked" [nzIndeterminate]="isIndeterminate"
+        <th nzWidth="60px" nzShowCheckbox [nzChecked]="isAllChecked" [nzIndeterminate]="isIndeterminate"
           (nzCheckedChange)="checkAll($event)"></th>
-        <th *ngFor="let column of columns" [nzWidth]="column.width ? column.width : '120px'">{{column.title}}</th>
-        <th>操作</th>
+        <th *ngFor="let column of columns" [nzWidth]="column.width ? column.width : '80px'">{{column.title}}</th>
+        <th nzRight="0px">操作</th>
       </tr>
     </thead>
     <tbody>

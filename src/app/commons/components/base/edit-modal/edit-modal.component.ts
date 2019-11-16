@@ -10,9 +10,8 @@ import _ from '@/commons/utils/utils';
 })
 export class EditModalComponent implements OnInit {
 
-  data: object;
+  data: object = {};
   @Input() columns: Array<Column>;
-  @Input() onSubmit: (params) => any;
   @Output() visibleChange: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Input() visible: boolean;
 
@@ -23,6 +22,7 @@ export class EditModalComponent implements OnInit {
   get editData() {
     return this.data;
   }
+  @Input() onSubmit: (params) => any;
 
   validateForm: FormGroup;
 
@@ -32,48 +32,38 @@ export class EditModalComponent implements OnInit {
     this.refreshFormFields();
   }
 
-  private refreshFormFields() {
+  private refreshFormFields = () => {
     const controlsConfig = {};
     this.columns.forEach(col => {
-      let validators = [];
-      controlsConfig[col.dataIndex] = [this.editData[col.dataIndex], validators];
+      const validators = [];
+      if (col.required) {
+        validators.push(Validators.required);
+      }
+      controlsConfig[col.dataIndex] = [this.data[col.dataIndex], validators];
     });
     this.validateForm = this.fb.group(controlsConfig);
   }
 
-  submitForm(): void {
+  submitForm = (): void => {
     for (const i in this.validateForm.controls) {
       this.validateForm.controls[i].markAsDirty();
       this.validateForm.controls[i].updateValueAndValidity();
     }
   }
 
-  reset() {
-  }
-
   private changeVisible() {
     this.visibleChange.emit(false);
   }
 
-  private collect() {
+  handleSubmit = () => {
+    this.changeVisible();
+    this.submitForm();
     const controls = this.validateForm.controls;
     _.keys(controls).forEach(key => this.data[key] = controls[key].value);
+    this.onSubmit(this.data);
   }
 
-  handleSave() {
-    this.collect();
-    this.changeVisible();
-    const data = this.data;
-    this.columns.filter(v => v.type === InputType.SWITCH)
-      .map(v => v.dataIndex)
-      .forEach(key => data[key] = data[key] ? 1 : 0);
-    this.columns.filter(v => v.type === InputType.SELECT)
-      .map(v => v.dataIndex)
-      .forEach(key => (data[key] === -1) && (delete data[key]));
-    this.onSubmit(data);
-  }
-
-  handleCancel() {
-    this.visibleChange.emit(false)
+  handleCancel = () => {
+    this.visibleChange.emit(false);
   }
 }
