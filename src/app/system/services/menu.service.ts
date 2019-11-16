@@ -40,6 +40,12 @@ export default class MenuService {
             icon: 'setting',
             path: '/role-info'
           },
+          {
+            name: '部门设置',
+            code: 'system',
+            icon: 'setting',
+            path: '/department'
+          },
         ]
       }, {
         name: '基础',

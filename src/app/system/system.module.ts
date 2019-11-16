@@ -14,12 +14,14 @@ import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CommonsModule } from '@/commons/commons.module';
 import { WelcomeComponent } from '@/system/components/welcome/welcome.component';
+import { DepartmentComponent } from '@/system/components/department/department.component';
 
 @NgModule({
   declarations: [
     UserInfoComponent,
     RoleInfoComponent,
-    WelcomeComponent
+    WelcomeComponent,
+    DepartmentComponent
   ],
   imports: [
     BrowserModule,

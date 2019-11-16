@@ -28,7 +28,7 @@ interface Response {
 @Injectable({ providedIn: 'root' })
 export default class HttpClientUtil {
 
-  constructor(private httpClient: HttpClient, private messageService: NzMessageService) {
+  constructor(private httpClient: HttpClient, private message: NzMessageService) {
   }
 
   private assembleUrl(url: string) {
@@ -71,7 +71,7 @@ export default class HttpClientUtil {
 
   private checkError = (response: Response): any => {
     if (response.status) {
-      this.messageService.create('error', response.errorMessage);
+      this.message.create('error', response.errorMessage);
       throw new Error(response.errorMessage);
     }
     return response.data;
