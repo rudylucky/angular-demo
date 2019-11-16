@@ -7,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class IndexComponent implements OnInit {
 
-  private isCollapsed = false;
+  isCollapsed = false;
 
   constructor() { }
 

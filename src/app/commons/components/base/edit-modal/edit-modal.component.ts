@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { DataItem, InputType, Column } from '@/commons/interfaces/service-interface';
 import _ from '@/commons/utils/utils';
+import { ObjectUnsubscribedError } from 'rxjs';
 
 @Component({
   selector: 'app-edit-modal',
@@ -17,37 +18,43 @@ export class EditModalComponent implements OnInit {
 
   @Input() set editData(value: object) {
     this.data = value;
-    this.refreshFormFields();
+    !this.form && this.createForm();
+    this.refreshFormFields(value);
   }
   get editData() {
     return this.data;
   }
   @Input() onSubmit: (params) => any;
 
-  validateForm: FormGroup;
+  form: FormGroup;
 
   constructor(private fb: FormBuilder) { }
 
   ngOnInit() {
-    this.refreshFormFields();
   }
 
-  private refreshFormFields = () => {
-    const controlsConfig = {};
-    this.columns.forEach(col => {
+  private createForm() {
+    const controlsConfig = this.columns.reduce((config, col) => {
       const validators = [];
       if (col.required) {
         validators.push(Validators.required);
       }
-      controlsConfig[col.dataIndex] = [this.data[col.dataIndex], validators];
-    });
-    this.validateForm = this.fb.group(controlsConfig);
+      config[col.dataIndex] = [null, validators];
+      return config;
+    }, {});
+    this.form = this.fb.group(controlsConfig);
   }
 
-  submitForm = (): void => {
-    for (const i in this.validateForm.controls) {
-      this.validateForm.controls[i].markAsDirty();
-      this.validateForm.controls[i].updateValueAndValidity();
+  private refreshFormFields = (data) => {
+    Object.keys(this.form.controls).forEach(key => {
+      this.form.controls[key].setValue(data[key]);
+    });
+  }
+
+  validate = (): void => {
+    for (const i in this.form.controls) {
+      this.form.controls[i].markAsDirty();
+      this.form.controls[i].updateValueAndValidity();
     }
   }
 
@@ -55,12 +62,13 @@ export class EditModalComponent implements OnInit {
     this.visibleChange.emit(false);
   }
 
-  handleSubmit = () => {
-    this.changeVisible();
-    this.submitForm();
-    const controls = this.validateForm.controls;
+  handleSubmit = async () => {
+    const controls = this.form.controls;
     _.keys(controls).forEach(key => this.data[key] = controls[key].value);
-    this.onSubmit(this.data);
+    const result = await this.onSubmit(this.data);
+    console.log(result);
+    this.form.reset();
+    (result === true) && this.changeVisible();
   }
 
   handleCancel = () => {

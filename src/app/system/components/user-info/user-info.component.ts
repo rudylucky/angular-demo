@@ -90,8 +90,8 @@ export class UserInfoComponent implements OnInit {
     return this.userService.update(data);
   }
 
-  delete = (data: UserData) => {
-    return this.userService.delete(data.id);
+  delete = (data) => {
+    return this.userService.delete(data);
   }
 
 }

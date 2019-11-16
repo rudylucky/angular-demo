@@ -91,15 +91,16 @@ export class SearchTableComponent implements OnInit {
   }
 
   handleModalSubmit = async (param) => {
+    let result;
     if (this.modalType === ModalType.EDIT) {
-      const result = await this.update(param);
+      result = await this.update(param);
       if (result) {
         this.message.create('info', '更新成功');
       } else {
         this.message.create('warn', '更新失败');
       }
     } else if (this.modalType === ModalType.SAVE) {
-      const result = await this.save(this.editData);
+      result = await this.save(this.editData);
       if (result) {
         this.message.create('info', '保存成功');
       } else {
@@ -109,6 +110,7 @@ export class SearchTableComponent implements OnInit {
       throw new Error('modal type error');
     }
     this.handleSearch();
+    return result;
   }
 
   private transferForRender = () => {
@@ -127,7 +129,7 @@ export class SearchTableComponent implements OnInit {
 
   handleDelete = async (data) => {
     const deleteData = this.tableData.find(v => data.id === v.id);
-    const result = await this.delete(deleteData);
+    const result = await this.delete(deleteData.id);
     if (result) {
       this.message.create('info', '删除成功');
     }
