@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { DataItem, InputType, Column } from '@/commons/interfaces/service-interface';
 import _ from '@/commons/utils/utils';
-import { ObjectUnsubscribedError } from 'rxjs';
+import { ObjectUnsubscribedError, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-edit-modal',
@@ -12,19 +12,25 @@ import { ObjectUnsubscribedError } from 'rxjs';
 export class EditModalComponent implements OnInit {
 
   data: object = {};
-  @Input() columns: Array<Column>;
+  cols = [];
+  @Input() set columns(value: Array<Column>) {
+    this.cols = value;
+  }
+  get columns() {
+    return this.cols;
+  }
   @Output() visibleChange: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Input() visible: boolean;
 
   @Input() set editData(value: object) {
     this.data = value;
     !this.form && this.createForm();
-    this.refreshFormFields(value);
+    this.refreshFormFields();
   }
   get editData() {
     return this.data;
   }
-  @Input() onSubmit: (params) => any;
+  @Input() onSubmit: (params) => Observable<boolean>;
 
   form: FormGroup;
 
@@ -43,12 +49,11 @@ export class EditModalComponent implements OnInit {
       return config;
     }, {});
     this.form = this.fb.group(controlsConfig);
+    this.refreshFormFields();
   }
 
-  private refreshFormFields = (data) => {
-    Object.keys(this.form.controls).forEach(key => {
-      this.form.controls[key].setValue(data[key]);
-    });
+  private refreshFormFields = () => {
+    this.form.patchValue(this.editData);
   }
 
   validate = (): void => {
@@ -58,20 +63,15 @@ export class EditModalComponent implements OnInit {
     }
   }
 
-  private changeVisible() {
-    this.visibleChange.emit(false);
+  private changeVisible = () => this.visibleChange.emit(false);
+
+  handleSubmit = () => {
+    console.log(this.form.value);
+    false && this.onSubmit(this.form.value).subscribe(resp => {
+      this.form.reset();
+      (resp === true) && this.changeVisible();
+    });
   }
 
-  handleSubmit = async () => {
-    const controls = this.form.controls;
-    _.keys(controls).forEach(key => this.data[key] = controls[key].value);
-    const result = await this.onSubmit(this.data);
-    console.log(result);
-    this.form.reset();
-    (result === true) && this.changeVisible();
-  }
-
-  handleCancel = () => {
-    this.visibleChange.emit(false);
-  }
+  handleCancel = () => this.visibleChange.emit(false);
 }

@@ -6,34 +6,34 @@ export interface SearchParam {
   currentPage: number;
 }
 
-export abstract class BaseService<T> {
+export abstract class BaseService<T extends DataItem> {
 
   constructor(protected httpClient: HttpClientUtil) {
   }
 
   protected abstract prefix(): string;
 
-  update = (params: DataItem): Promise<boolean> => {
+  update = (params: T): Observable<boolean> => {
     return this.httpClient.post(`${this.prefix()}/update`, params);
   }
 
-  delete = (ids: number | Array<number>): Promise<boolean> => {
+  delete = (ids: number | Array<number>): Observable<boolean> => {
     return this.httpClient.delete(`${this.prefix()}/delete`, { ids });
   }
 
-  save = (params: DataItem): Promise<boolean> => {
+  save = (params: T): Observable<boolean> => {
     return this.httpClient.post(`${this.prefix()}/save`, params);
   }
 
-  search = (params: SearchParam): Promise<PageData<DataItem>> => {
+  search = (params: SearchParam): Observable<PageData<T>> => {
     return this.httpClient.post(`${this.prefix()}/search`, params);
   }
 
-  list = (ids: Array<number>): Promise<Array<DataItem>> => {
-    return this.httpClient.post(`${this.prefix()}/list`, ids);
+  list = (param?: T): Observable<Array<T>> => {
+    return this.httpClient.post(`${this.prefix()}/list`, param || {});
   }
 
-  info = (code: number): Promise<DataItem> => {
+  info = (code: number): Observable<T> => {
     return this.httpClient.get(`${this.prefix()}/info`, { code });
   }
 
@@ -61,12 +61,13 @@ export interface Column {
   required?: boolean;
   searchable?: boolean;
   width?: number | string;
+  multiple?: boolean;
   render?: (value) => any;
 }
 
 export interface DataItem {
-  id: number;
-  code: string;
+  id?: number;
+  code?: string;
 }
 
 export interface TableData {
@@ -83,10 +84,11 @@ export enum InputType {
   DATETIME = 6,
   RADIO = 7,
   SWITCH = 8,
-  UPLOAD = 9
+  UPLOAD = 9,
+  MULTI_SELECT = 10
 }
 
 export interface Option {
-  value: boolean | number;
+  value: boolean | number | string;
   title: string;
 }

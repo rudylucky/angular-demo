@@ -1,7 +1,8 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { HOSTNAME, PORT } from "@/commons/config/config";
+import { Observable, of, pipe } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
+import { HOSTNAME, PORT } from '@/commons/config/config';
 import _ from './utils';
 import { NzMessageService } from 'ng-zorro-antd';
 
@@ -35,24 +36,24 @@ export default class HttpClientUtil {
     return `http://${HOSTNAME}:${PORT}/${url}`;
   }
 
-  get = (url: string, param?: object): Promise<any> => {
+  get = (url: string, param?: object): Observable<any> => {
     const qs = _.queryString(param);
     const fullUrl = this.assembleUrl(url);
-    return this.httpClient.get(`${fullUrl}?${qs}`).toPromise().then(this.checkError);
+    return this.httpClient.get(`${fullUrl}?${qs}`).pipe(catchError(this.checkError), map(this.extractData));
   }
 
-  post = (url: string, params?: object): Promise<any> => {
-    return this.httpClient.post(this.assembleUrl(url), params, this.wrap(params)).toPromise().then(this.checkError);
+  post = (url: string, params?: object): Observable<any> => {
+    return this.httpClient.post(this.assembleUrl(url), params, this.wrap(params)).pipe(catchError(this.checkError), map(this.extractData));
   }
 
-  delete = (url: string, params: object): Promise<any> => {
+  delete = (url: string, params: object): Observable<any> => {
     const fullUrl = this.assembleUrl(url);
     const qs = _.queryString(params);
-    return this.httpClient.delete(`${fullUrl}?${qs}`, this.wrap(params)).toPromise().then(this.checkError);
+    return this.httpClient.delete(`${fullUrl}?${qs}`, this.wrap(params)).pipe(catchError(this.checkError), map(this.extractData));
   }
 
-  put = (url: string, params: object): Promise<any> => {
-    return this.httpClient.put(this.assembleUrl(url), this.wrap(params)).toPromise().then(this.checkError);
+  put = (url: string, params: object): Observable<any> => {
+    return this.httpClient.put(this.assembleUrl(url), this.wrap(params)).pipe(catchError(this.checkError), map(this.extractData));
   }
 
   private wrap = (param: object): HttpOption => {
@@ -69,12 +70,15 @@ export default class HttpClientUtil {
     };
   }
 
+  private extractData = (response: Response) => {
+    return response.data;
+  }
+
   private checkError = (response: Response): any => {
     if (response.status) {
       this.message.create('error', response.errorMessage);
       throw new Error(response.errorMessage);
     }
-    return response.data;
   }
 
 }

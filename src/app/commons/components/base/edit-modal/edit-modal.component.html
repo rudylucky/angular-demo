@@ -8,10 +8,16 @@
           <nz-input-group>
             <span>
               <input *ngSwitchDefault nz-input [formControlName]="column.dataIndex" />
-              <nz-select *ngSwitchCase="1" [formControlName]="column.dataIndex" nzPlaceHolder="请选择...">
+              <nz-select *ngSwitchCase="1" [nzMode]="column.multiple ? 'multiple' : 'default'" [formControlName]="column.dataIndex" nzPlaceHolder="请选择...">
                 <nz-option *ngFor="let option of column.options" [nzValue]="option.value" [nzLabel]="option.title">
                 </nz-option>
               </nz-select>
+              <nz-input-number *ngSwitchCase="3" [formControlName]="column.dataIndex" [nzMin]="0" [nzStep]="1"></nz-input-number>
+              <nz-date-picker *ngSwitchCase="4" [formControlName]="column.dataIndex"></nz-date-picker>
+              <nz-time-picker *ngSwitchCase="5" [formControlName]="column.dataIndex"></nz-time-picker>
+              <nz-radio-group *ngSwitchCase="7" [formControlName]="column.dataIndex">
+                <label *ngFor="let option of column.options" nz-radio [nzValue]="option.value">{{option.title}}</label>
+              </nz-radio-group>
               <nz-switch *ngSwitchCase="8" [formControlName]="column.dataIndex"></nz-switch>
             </span>
           </nz-input-group>

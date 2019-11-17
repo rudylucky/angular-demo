@@ -16,17 +16,23 @@ enum ModalType {
 })
 export class SearchTableComponent implements OnInit {
 
-  @Input() columns: Array<Column> = [];
   @Input() tableData: Array<DataItem> = [];
 
-  @Input() update: (params) => Promise<any>;
-  @Input() delete: (params) => Promise<any>;
-  @Input() search: (params: SearchParam) => Promise<PageData<any>>;
+  @Input() update: (params) => Observable<any>;
+  @Input() delete: (params) => Observable<any>;
+  @Input() search: (params: SearchParam) => Observable<PageData<any>>;
   @Input() list: (params) => Array<any>;
-  @Input() info: (params) => Promise<any>;
-  @Input() save: (params) => Promise<any>;
+  @Input() info: (params) => Observable<any>;
+  @Input() save: (params) => Observable<any>;
 
-  renderedData = [];
+  @Input() set columns(value: Array<Column>) {
+    this.cols = value;
+  }
+  get columns() {
+    return this.cols;
+  }
+
+  cols: Array<Column> = [];
   checkedList: { [key: string]: boolean } = {};
   numberOfChecked = 0;
 
@@ -53,35 +59,40 @@ export class SearchTableComponent implements OnInit {
     this.searchData = {};
   }
 
-  modalVisibleChange = (visible) => {
-    this.modalVisible = visible;
-  }
+  modalVisibleChange = (visible) => this.modalVisible = visible;
 
-  currentPageDataChange = ($event: DataItem[]): void => {
-    this.refreshStatus();
-  }
+  currentPageDataChange = ($event: DataItem[]): void => this.refreshStatus();
 
   checkAll = (value: boolean): void => {
     this.tableData.forEach(v => this.checkedList[v.id] = value);
     this.refreshStatus();
   }
 
-  handleSearch = async () => {
-    const pageData: PageData<DataItem> = await this.search({
+  handleSearch = () => {
+    this.search({
       pageSize: this.pageSize,
       currentPage: this.pageIndex,
       ...this.searchData
+    }).subscribe(pageData => {
+      this.total = pageData.total;
+      this.tableData = pageData.records;
+      this.loading = false;
     });
-    this.total = pageData.total;
-    this.tableData = pageData.records;
-    this.loading = false;
-    this.transferForRender();
   }
 
-  preEdit = async (data: DataItem) => {
+  preEdit = (data: DataItem) => {
     this.modalVisible = true;
     this.modalType = ModalType.EDIT;
-    this.editData = await this.info(data.code);
+    this.info(data.code).subscribe(resp => this.editData = resp);
+  }
+
+  renderCell(column: Column, data) {
+    const value = data[column.dataIndex];
+    if (column.options && column.options.length) {
+      const option = column.options.find(v => v.value === value);
+      return _.isNull(option) ? '-' : option.title;
+    }
+    return _.isNull(value) ? '-' : value;
   }
 
   preSave = () => {
@@ -113,20 +124,6 @@ export class SearchTableComponent implements OnInit {
     return result;
   }
 
-  private transferForRender = () => {
-    this.renderedData = _.clone(this.tableData);
-    this.columns.filter(element => [InputType.SELECT, InputType.SWITCH].includes(element.type))
-      .forEach(element => {
-        this.renderedData.forEach(v => {
-          const item = element.options.find(option => option.value === v[element.dataIndex]);
-          if (_.isNull(item)) {
-            return;
-          }
-          v[element.dataIndex] = item.title;
-        });
-      });
-  }
-
   handleDelete = async (data) => {
     const deleteData = this.tableData.find(v => data.id === v.id);
     const result = await this.delete(deleteData.id);
@@ -136,9 +133,7 @@ export class SearchTableComponent implements OnInit {
     this.handleSearch();
   }
 
-  handleCheckChange = (): void => {
-    this.refreshStatus();
-  }
+  handleCheckChange = (): void => this.refreshStatus();
 
   refreshStatus = (): void => {
     this.isAllChecked = this.tableData.every(v => this.checkedList[v.id] === true);

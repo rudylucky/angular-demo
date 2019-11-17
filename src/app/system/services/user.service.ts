@@ -14,9 +14,7 @@ export class UserService extends BaseService<UserData> {
     super(httpClient);
   }
 
-  protected prefix = () => {
-    return 'system/user';
-  }
+  protected prefix = () => 'system/user';
 
   listGenderType(): Observable<Array<Option>> {
     return of([{
@@ -30,19 +28,25 @@ export class UserService extends BaseService<UserData> {
 
   listDegreeType(): Observable<Array<Option>> {
     return of([{
-      value: 0,
-      title: '小学',
-    }, {
       value: 1,
-      title: '初中',
+      title: '文盲',
     }, {
       value: 2,
-      title: '本科',
+      title: '小学',
     }, {
       value: 3,
-      title: '硕士',
+      title: '初中',
     }, {
       value: 4,
+      title: '高中',
+    }, {
+      value: 5,
+      title: '本科',
+    }, {
+      value: 6,
+      title: '硕士',
+    }, {
+      value: 7,
       title: '博士',
     }]);
   }

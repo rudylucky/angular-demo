@@ -4,14 +4,12 @@ import HttpClientUtil from '@/commons/utils/httpclient';
 
 @Injectable()
 export class RoleService extends BaseService<RoleData> {
+
+  protected prefix = () => 'system/role';
+
   constructor(@Inject(HttpClientUtil) httpClient) {
     super(httpClient);
   }
-
-  protected prefix = () => {
-    return 'system/role';
-  }
-
 }
 
 export interface RoleData extends DataItem {
