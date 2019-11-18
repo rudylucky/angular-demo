@@ -1,9 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Column, DataItem, PageData, SearchParam, InputType } from '@/commons/interfaces/service-interface';
+import { Column, DataItem, PageData, SearchParam, InputType, Option } from '@/commons/interfaces/service-interface';
 import _ from '@/commons/utils/utils';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { Observable, fromEvent } from 'rxjs';
 import { NzMessageService } from 'ng-zorro-antd';
+import { debounceTime } from 'rxjs/operators';
 
 enum ModalType {
   EDIT, SAVE
@@ -43,6 +44,7 @@ export class SearchTableComponent implements OnInit {
   pageIndex = 1;
   pageSize = 10;
   total = 1;
+  scrollY: string;
 
   editData = {};
   searchData = {};
@@ -57,6 +59,7 @@ export class SearchTableComponent implements OnInit {
     this.handleSearch();
     this.searchColumns = this.columns.filter(v => v.searchable);
     this.searchData = {};
+    this.computeScrollY();
   }
 
   modalVisibleChange = (visible) => this.modalVisible = visible;
@@ -88,11 +91,25 @@ export class SearchTableComponent implements OnInit {
 
   renderCell(column: Column, data) {
     const value = data[column.dataIndex];
-    if (column.options && column.options.length) {
-      const option = column.options.find(v => v.value === value);
-      return _.isNull(option) ? '-' : option.title;
+    if (column.multiple) {
+      return this.renderMultiSelect(column, value);
+    }
+    if (column.options) {
+      return this.renderSelect(column, value);
     }
     return _.isNull(value) ? '-' : value;
+  }
+
+  private renderMultiSelect = (column: Column, value: Array<string | number | boolean>): string => {
+    if (_.isNull(value)) {
+      return '-';
+    }
+    return column.options.filter(v => value.includes(v.value)).map(v => v.title).join(', ');
+  }
+
+  private renderSelect = (column: Column, value): string => {
+    const option = column.options.find(v => v.value === value);
+    return _.isNull(option) ? '-' : option.title;
   }
 
   preSave = () => {
@@ -101,27 +118,24 @@ export class SearchTableComponent implements OnInit {
     this.editData = {};
   }
 
-  handleModalSubmit = async (param) => {
-    let result;
+  handleModalSubmit = (param) => {
+    let result: Observable<boolean>;
     if (this.modalType === ModalType.EDIT) {
-      result = await this.update(param);
-      if (result) {
-        this.message.create('info', '更新成功');
-      } else {
-        this.message.create('warn', '更新失败');
-      }
+      result = this.update(param);
     } else if (this.modalType === ModalType.SAVE) {
-      result = await this.save(this.editData);
-      if (result) {
+      result = this.save(this.editData);
+    } else {
+      throw new Error('modal type error');
+    }
+    result.subscribe(resp => {
+      if (resp) {
+        this.modalVisibleChange(false);
         this.message.create('info', '保存成功');
       } else {
         this.message.create('warn', '保存失败');
       }
-    } else {
-      throw new Error('modal type error');
-    }
-    this.handleSearch();
-    return result;
+      this.handleSearch();
+    });
   }
 
   handleDelete = async (data) => {
@@ -138,6 +152,21 @@ export class SearchTableComponent implements OnInit {
   refreshStatus = (): void => {
     this.isAllChecked = this.tableData.every(v => this.checkedList[v.id] === true);
     this.isIndeterminate = !this.isAllChecked && this.tableData.some(v => this.checkedList[v.id] === true);
+  }
+
+  computeScrollY = () => {
+    const container = document.querySelector('.container-search-table')
+    const resizeEventListener = () => {
+      const height = container.clientHeight - 265;
+      if (height < 200) {
+        this.scrollY = 200 + 'px';
+      } else {
+        this.scrollY = height + 'px';
+      }
+    };
+    fromEvent(container, 'resize').subscribe(resizeEventListener);
+
+    setTimeout(resizeEventListener, 500);
   }
 
 }

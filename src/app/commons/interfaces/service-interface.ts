@@ -62,6 +62,7 @@ export interface Column {
   searchable?: boolean;
   width?: number | string;
   multiple?: boolean;
+  hidden?: boolean;
   render?: (value) => any;
 }
 

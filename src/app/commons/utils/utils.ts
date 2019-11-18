@@ -44,7 +44,23 @@ function queryString(obj: object): string {
   return s;
 }
 
+function debounce(fn, wait = 500, immediate: boolean = true) {
+  let timer = null;
+  return function (...args) {
+    if (timer) {
+      clearTimeout(timer);
+    } else if (immediate) {
+      fn.apply(this, args)
+    }
+    timer = setTimeout(() => {
+      fn.apply(this, args)
+    }, wait)
+  }
+}
+
+
 const _ = {
+  debounce,
   clone,
   queryString,
   range,

@@ -11,8 +11,6 @@ import { ObjectUnsubscribedError, Observable } from 'rxjs';
 })
 export class EditModalComponent implements OnInit {
 
-  data: object = {};
-  cols = [];
   @Input() set columns(value: Array<Column>) {
     this.cols = value;
   }
@@ -30,8 +28,10 @@ export class EditModalComponent implements OnInit {
   get editData() {
     return this.data;
   }
-  @Input() onSubmit: (params) => Observable<boolean>;
+  @Input() onSubmit: (params) => void;
 
+  private data: object = {};
+  cols = [];
   form: FormGroup;
 
   constructor(private fb: FormBuilder) { }
@@ -63,14 +63,8 @@ export class EditModalComponent implements OnInit {
     }
   }
 
-  private changeVisible = () => this.visibleChange.emit(false);
-
   handleSubmit = () => {
-    console.log(this.form.value);
-    false && this.onSubmit(this.form.value).subscribe(resp => {
-      this.form.reset();
-      (resp === true) && this.changeVisible();
-    });
+    this.onSubmit(Object.assign(this.editData, this.form.value));
   }
 
   handleCancel = () => this.visibleChange.emit(false);

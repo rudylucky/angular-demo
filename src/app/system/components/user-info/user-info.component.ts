@@ -27,10 +27,13 @@ export class UserInfoComponent implements OnInit {
     this.columns = [
       { title: '姓名', dataIndex: 'username', searchable: true, required: true, },
       {
-        title: '角色', dataIndex: 'roles', required: true,
+        title: '角色', dataIndex: 'roleCodes', required: true,
         type: InputType.SELECT, options: [], multiple: true
       },
-      { title: '姓别', dataIndex: 'gender', type: InputType.RADIO, options: this.listGenderType(), searchable: true, required: true, },
+      {
+        title: '姓别', dataIndex: 'gender', type: InputType.RADIO, options: this.listGenderType(),
+        searchable: true, required: true,
+      },
       { title: '邮箱', dataIndex: 'email', },
       { title: '年龄', dataIndex: 'age', type: InputType.NUMBER, required: true, },
       { title: '学历', dataIndex: 'degree', type: InputType.SELECT, options: this.listDegreeType(), },
@@ -48,7 +51,7 @@ export class UserInfoComponent implements OnInit {
   listRoles = () => {
     const mapOption = (roles: Array<RoleData>) => roles.map(v => ({ value: v.code, title: v.roleName }));
     return this.roleService.list().pipe(map(mapOption)).subscribe(roles => {
-      this.columns.find(c => c.dataIndex === 'roles').options = roles;
+      this.columns.find(c => c.dataIndex === 'roleCodes').options = roles;
     });
   }
 

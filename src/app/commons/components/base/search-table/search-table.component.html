@@ -22,10 +22,11 @@
   <ng-template #rangeTemplate let-range="range" let-total>
     当前 {{ range[0] }}-{{ range[1] }} 条， 共 {{ total }} 条数据
   </ng-template>
-  <nz-table [nzLoading]="loading" nzSize="small" [nzData]="tableData" [nzPageIndex]="pageIndex"
-    [nzShowTotal]="rangeTemplate" nzShowSizeChanger [nzTotal]="total" [nzScroll]="{ x: '1200px'}"
-    nzSize="small" nzFrontPagination="false" nzShowQuickJumper nzShowPagination [(nzPageSize)]="pageSize"
-    [(nzPageIndex)]="pageIndex" (nzPageSizeChange)="handleSearch()" (nzPageIndexChange)="handleSearch()">
+  <nz-table class="app-table" [nzLoading]="loading" nzSize="small" [nzData]="tableData" [nzPageIndex]="pageIndex"
+    [nzShowTotal]="rangeTemplate" nzShowSizeChanger [nzTotal]="total"
+    [nzScroll]="{ x: (columns.length * 120 + 160)  + 'px', y: scrollY}" nzSize="small" nzFrontPagination="false" nzShowQuickJumper
+    nzShowPagination [(nzPageSize)]="pageSize" [(nzPageIndex)]="pageIndex" (nzPageSizeChange)="handleSearch()"
+    (nzPageIndexChange)="handleSearch()">
     <thead nzSingleSort>
       <tr>
         <th nzWidth="60px" nzShowCheckbox [nzChecked]="isAllChecked" [nzIndeterminate]="isIndeterminate"
