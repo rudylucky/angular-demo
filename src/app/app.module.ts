@@ -7,6 +7,7 @@ import { IndexComponent } from '@/system/components/index/index.component';
 import { SystemModule } from '@/system/system.module';
 import { CommonsModule } from './commons/commons.module';
 import { MySiderComponent } from './commons/components/layout/my-sider/my-sider.component';
+import { ImModule } from './im/im.module';
 
 
 registerLocaleData(zh);
@@ -18,6 +19,7 @@ registerLocaleData(zh);
     MySiderComponent
   ],
   imports: [
+    ImModule,
     SystemModule,
     CommonsModule
   ],
